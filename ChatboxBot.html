@@ -54,7 +54,7 @@
     }
 
     #chatlog>div {
-      animation: fadeInRight .3s ease forwards, fadeOut 0.5s ease 15s forwards;
+      animation: fadeInRight .3s ease forwards, fadeOut 0.5s ease 150s forwards;
     }
 
     .colon {
@@ -151,52 +151,69 @@
     // Define configuration options
     const opts = {
       connection: { reconnect: true },
-      channels: ["your_channel_name"]
+      //
+      // Chnage this to whatever your channel name is
+      //
+      channels: ["your_channel_name_here"]
     };
 
-    const chatlog = document.querySelector("#chatlog");
+    const chatlogNode = document.querySelector("#chatlog");
     const template = document.querySelector("#chatmessage");
 
     const namecolors = ["Blue", "Coral", "DodgerBlue", "SpringGreen", "YellowGreen", "Green", "OrangeRed", "Red", "GoldenRod", "HotPink", "CadetBlue", "SeaGreen", "Chocolate", "BlueViolet", "Firebrick"];
 
-    function onConnectError(error) {
-      console.error(error);
-      document.getElementById("chatmessage").innerHTML = "Failed to connect check identity settings";
-    }
+    fetch("https://badges.twitch.tv/v1/badges/global/display").then(res => res.json()).then(badgesData => {
 
-    // Called every time a message comes in
-    function onMessageHandler(channel, context, msg, self) {
-      const message = template.content.cloneNode(true);
+      const badgesDataSet = badgesData;
 
-      const name = message.querySelector(".name");
-      const displayname = context["display-name"];
-      name.innerHTML = displayname;
-      if(context["color"] != null){
-        name.style.color = context["color"];
-      } else {
-        name.style.color = namecolors[context["display-name"].charCodeAt(displayname.length - 1) % namecolors.length];
+      // Called every time the bot connects to Twitch chat
+      function onConnectedHandler(addr, port) {
+        console.log(`* Connected to ${addr}:${port}`);
       }
 
-      // TODO: badges 
+      function onConnectError(error) {
+        console.error(error);
+        chatlog.innerHTML = "Failed to connect check identity settings";
+      }
 
-      message.querySelector(".message").innerHTML = msg;
+      // Called every time a message comes in
+      function onMessageHandler(channel, context, msg, self) {
+        const messageNode = template.content.cloneNode(true);
 
-      chatlog.appendChild(message);
-    }
+        const nameNode = messageNode.querySelector(".name");
+        const displayname = context["display-name"];
+        nameNode.innerHTML = displayname;
+        if (context["color"] != null) {
+          nameNode.style.color = context["color"];
+        } else {
+          nameNode.style.color = namecolors[displayname.charCodeAt(displayname.length - 1) % namecolors.length];
+        }
 
-    // Called every time the bot connects to Twitch chat
-    function onConnectedHandler(addr, port) {
-      console.log(`* Connected to ${addr}:${port}`);
-    }
+        const badgesNode = messageNode.querySelector(".badges");
+        const badges = context["badges"];
+        for(const badge in badges){
+          const badgeImg = document.createElement("img");
+          badgeImg.src = badgesDataSet.badge_sets[badge].versions[badges[badge]].image_url_1x;
+          badgeImg.className  = "badge";
+          badgesNode.appendChild(badgeImg);
+        }
 
-    const client = new tmi.Client(opts);
+        // TODO: EMOTES
+        messageNode.querySelector(".message").innerHTML = msg;
 
-    // Register our event handlers (defined above)
-    client.on('message', onMessageHandler);
-    client.on('connected', onConnectedHandler);
+        chatlogNode.appendChild(messageNode);
+      }
 
-    // Connect to Twitch:
-    client.connect().catch(onConnectError);
+      const client = new tmi.Client(opts);
+
+      // Register our event handlers (defined above)
+      client.on('message', onMessageHandler);
+      client.on('connected', onConnectedHandler);
+
+      // Connect to Twitch:
+      client.connect().catch(onConnectError);
+
+    })
 
   </script>
 </body>
