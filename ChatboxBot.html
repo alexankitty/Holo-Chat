@@ -31,6 +31,17 @@
       color: white;
     }
 
+    /*****************************************************
+      *                                                    *
+      * Change this to make the animation faster or slower *
+      *                                                    *
+      ******************************************************/
+    :root {
+      --fade-in-duration: .3s;
+      --fade-out-delay: 15s;
+      --fade-out-duration: .5s;
+    }
+
     @keyframes fadeInRight {
       0% {
         opacity: 0;
@@ -54,12 +65,7 @@
     }
 
     #chatlog>div {
-      /*****************************************************
-      *                                                    *
-      * Change this to make the animation faster or slower *
-      *                                                    *
-      ******************************************************/
-      animation: fadeInRight .3s ease forwards, fadeOut 0.5s ease 15s forwards;
+      animation: fadeInRight var(--fade-in-duration) ease forwards, fadeOut var(--fade-out-duration) ease var(--fade-out-delay) forwards;
     }
 
     .colon {
@@ -139,16 +145,14 @@
 
   <div id="chatlog"></div>
 
-  <template id="chatmessage">
-    <div>
+  <template id="chatmessage"><div>
       <span class="meta">
         <span class="badges"></span>
         <span class="name"></span>
       </span>
 
       <span class="message"></span>
-    </div>
-  </template>
+  </div></template>
 
   <script>
 
@@ -162,8 +166,42 @@
       channels: ["your_channel_name"]
     };
 
+    /* 
+     * CSS Time to Milliseconds
+     * by Jake Bellacera (http://jakebellacera.com)
+     * ============================================
+    */
+    function css_time_to_milliseconds(time_string) {
+      var num = parseFloat(time_string, 10),
+        unit = time_string.match(/m?s/),
+        milliseconds;
+
+      if (unit) {
+        unit = unit[0];
+      }
+
+      switch (unit) {
+        case "s": // seconds
+          milliseconds = num * 1000;
+          break;
+        case "ms": // milliseconds
+          milliseconds = num;
+          break;
+        default:
+          milliseconds = 0;
+          break;
+      }
+
+      return milliseconds;
+    }
+
     const chatlogNode = document.querySelector("#chatlog");
     const template = document.querySelector("#chatmessage");
+
+    const css = getComputedStyle(document.documentElement);
+    const messageFadeOutDelay = getComputedStyle(document.documentElement).getPropertyValue('--fade-out-delay');
+    const messageFadeOutDuration = getComputedStyle(document.documentElement).getPropertyValue('--fade-out-duration');
+    const messageRemovalTimeMs = css_time_to_milliseconds(messageFadeOutDelay) + css_time_to_milliseconds(messageFadeOutDuration) + 100;
 
     const namecolors = ["Blue", "Coral", "DodgerBlue", "SpringGreen", "YellowGreen", "Green", "OrangeRed", "Red", "GoldenRod", "HotPink", "CadetBlue", "SeaGreen", "Chocolate", "BlueViolet", "Firebrick"];
 
@@ -217,7 +255,13 @@
         }
         messageNode.querySelector(".message").innerHTML = msgWithEmotes;
 
+        // Add message
         chatlogNode.appendChild(messageNode);
+
+        // Remove message after fade out animation
+        setTimeout(() => {
+          chatlogNode.firstChild.remove();
+        }, messageRemovalTimeMs);
       }
 
       const client = new tmi.Client(opts);
