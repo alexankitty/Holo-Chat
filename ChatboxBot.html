@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <title>Twitch-Chatbox-Bot</title>
+  <script src="https://github.com/tmijs/tmi.js/releases/download/1.7.2/tmi.min.js"></script>
+
+  <style>
+    @import url(https://fonts.googleapis.com/css?family=Roboto:700);
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      text-shadow: 0 0 1px #000, 0 0 2px #000;
+      background: none;
+      font-family: 'Roboto';
+      font-weight: 700;
+      font-size: 1em;
+      line-height: 1.5em;
+      color: white;
+    }
+
+    @keyframes fadeInRight {
+      0% {
+        opacity: 0;
+        transform: translateX(600px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes fadeOut {
+      0% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0;
+      }
+    }
+
+    #chatlog>div {
+      animation: fadeInRight .3s ease forwards, fadeOut 0.5s ease 15s forwards;
+    }
+
+    .colon {
+      display: none;
+    }
+
+    #chatlog {
+      display: table;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      padding: 0 10px 10px;
+      width: 100%;
+      table-layout: fixed;
+    }
+
+    #chatlog>div {
+      display: table-row;
+    }
+
+    #chatlog>div.deleted {
+      visibility: hidden;
+    }
+
+    #chatlog .emote {
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      padding: 0.4em 0.2em;
+      position: relative;
+    }
+
+    #chatlog .emote img {
+      display: inline-block;
+      height: 1em;
+      opacity: 0;
+    }
+
+    #chatlog .message,
+    #chatlog .meta {
+      vertical-align: top;
+      display: table-cell;
+      padding-bottom: 0.1em;
+    }
+
+    #chatlog .meta {
+      width: 35%;
+      text-align: right;
+      padding-right: 0.5em;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    #chatlog .message {
+      word-wrap: break-word;
+      width: 65%;
+    }
+
+    .badge {
+      display: inline-block;
+      margin-right: 0.2em;
+      position: relative;
+      height: 1em;
+      vertical-align: middle;
+      top: -0.1em;
+    }
+
+    .name {
+      margin-left: 0.2em;
+    }
+  </style>
+
+</head>
+
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+
+  <div id="chatlog"></div>
+
+  <template id="chatmessage">
+    <div>
+      <span class="meta">
+        <span class="badges"></span>
+        <span class="name"></span>
+      </span>
+
+      <span class="message"></span>
+    </div>
+  </template>
+
+  <script>
+
+    // Define configuration options
+    const opts = {
+      connection: { reconnect: true },
+      channels: ["your_channel_name"]
+    };
+
+    const chatlog = document.querySelector("#chatlog");
+    const template = document.querySelector("#chatmessage");
+
+    const namecolors = ["Blue", "Coral", "DodgerBlue", "SpringGreen", "YellowGreen", "Green", "OrangeRed", "Red", "GoldenRod", "HotPink", "CadetBlue", "SeaGreen", "Chocolate", "BlueViolet", "Firebrick"];
+
+    function onConnectError(error) {
+      console.error(error);
+      document.getElementById("chatmessage").innerHTML = "Failed to connect check identity settings";
+    }
+
+    // Called every time a message comes in
+    function onMessageHandler(channel, context, msg, self) {
+      const message = template.content.cloneNode(true);
+
+      const name = message.querySelector(".name");
+      const displayname = context["display-name"];
+      name.innerHTML = displayname;
+      if(context["color"] != null){
+        name.style.color = context["color"];
+      } else {
+        name.style.color = namecolors[context["display-name"].charCodeAt(displayname.length - 1) % namecolors.length];
+      }
+
+      // TODO: badges 
+
+      message.querySelector(".message").innerHTML = msg;
+
+      chatlog.appendChild(message);
+    }
+
+    // Called every time the bot connects to Twitch chat
+    function onConnectedHandler(addr, port) {
+      console.log(`* Connected to ${addr}:${port}`);
+    }
+
+    const client = new tmi.Client(opts);
+
+    // Register our event handlers (defined above)
+    client.on('message', onMessageHandler);
+    client.on('connected', onConnectedHandler);
+
+    // Connect to Twitch:
+    client.connect().catch(onConnectError);
+
+  </script>
+</body>
+
+</html>
