@@ -251,7 +251,7 @@
           const firstEmoteOccurance = emotes[emote][0].split("-");
           const emoteString = msg.substring(parseInt(firstEmoteOccurance[0]), parseInt(firstEmoteOccurance[1]) + 1);
           const emoteImg = `<span class="emote"><img src="${emoteImgSrc}" alt="${emoteString}"></span>`;
-          msgWithEmotes = msgWithEmotes.replace(new RegExp(emoteString, "g"), emoteImg);
+          msgWithEmotes = msgWithEmotes.replaceAll(emoteString, emoteImg);
         }
         messageNode.querySelector(".message").innerHTML = msgWithEmotes;
 
