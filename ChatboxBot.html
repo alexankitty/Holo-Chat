@@ -6,29 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#000000" />
   <title>Twitch-Chatbox-Bot</title>
-  <script src="https://github.com/tmijs/tmi.js/releases/download/v1.8.3/tmi.min.js"></script>
 
   <style>
     @import url(https://fonts.googleapis.com/css?family=Roboto:700);
 
     * {
       box-sizing: border-box;
-    }
-
-    html,
-    body {
-      height: 100%;
-      overflow: hidden;
-    }
-
-    body {
-      text-shadow: 0 0 1px #000, 0 0 2px #000;
-      background: none;
-      font-family: 'Roboto';
-      font-weight: 700;
-      font-size: 1em;
-      line-height: 1.5em;
-      color: white;
     }
 
     /*****************************************************
@@ -64,12 +47,16 @@
       }
     }
 
-    #chatlog>div {
-      animation: fadeInRight var(--fade-in-duration) ease forwards, fadeOut var(--fade-out-duration) ease var(--fade-out-delay) forwards;
-    }
-
-    .colon {
-      display: none;
+    html {
+      height: 100%;
+      overflow: hidden;
+      text-shadow: 0 0 1px #000, 0 0 2px #000;
+      background: none;
+      font-family: 'Roboto';
+      font-weight: 700;
+      font-size: 1em;
+      line-height: 1.5em;
+      color: white;
     }
 
     #chatlog {
@@ -84,6 +71,10 @@
 
     #chatlog>div {
       display: table-row;
+    }
+
+    #chatlog>div {
+      animation: fadeInRight var(--fade-in-duration) ease forwards, fadeOut var(--fade-out-duration) ease var(--fade-out-delay) forwards;
     }
 
     #chatlog>div.deleted {
@@ -124,7 +115,7 @@
       width: 65%;
     }
 
-    .badge {
+    #chatlog .badge {
       display: inline-block;
       margin-right: 0.2em;
       position: relative;
@@ -133,7 +124,7 @@
       top: -0.1em;
     }
 
-    .name {
+    #chatlog .name {
       margin-left: 0.2em;
     }
   </style>
@@ -145,16 +136,19 @@
 
   <div id="chatlog"></div>
 
-  <template id="chatmessage"><div>
+  <template id="chatmessage">
+    <div>
       <span class="meta">
         <span class="badges"></span>
         <span class="name"></span>
       </span>
 
       <span class="message"></span>
-  </div></template>
+    </div>
+  </template>
 
-  <script>
+  <script src="https://github.com/tmijs/tmi.js/releases/download/v1.8.4/tmi.min.js"></script>
+  <script type="module">
 
     // Define configuration options
     const opts = {
@@ -163,8 +157,8 @@
       *       Change this to your channel name            *
       *                                                   *
       *****************************************************/
-      channels: ["your_channel_name"]
-    };
+      channels: ["CHANNEL_NAME"]
+    }
 
     /* 
      * CSS Time to Milliseconds
@@ -172,108 +166,134 @@
      * ============================================
     */
     function css_time_to_milliseconds(time_string) {
-      var num = parseFloat(time_string, 10),
-        unit = time_string.match(/m?s/),
-        milliseconds;
+      const num = parseFloat(time_string, 10)
 
-      if (unit) {
-        unit = unit[0];
-      }
+      let unit = time_string.match(/m?s/)
+      if (unit) unit = unit[0]
 
       switch (unit) {
         case "s": // seconds
-          milliseconds = num * 1000;
-          break;
+          return num * 1000
         case "ms": // milliseconds
-          milliseconds = num;
-          break;
+          return num
         default:
-          milliseconds = 0;
-          break;
+          return 0
       }
-
-      return milliseconds;
     }
 
-    const chatlogNode = document.querySelector("#chatlog");
-    const template = document.querySelector("#chatmessage");
+    function escapeRegex(string) {
+      return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+    }
+
+    const chatlogNode = document.querySelector("#chatlog")
+    const msgTemplate = document.querySelector("#chatmessage")
 
     const css = getComputedStyle(document.documentElement);
-    const messageFadeOutDelay = getComputedStyle(document.documentElement).getPropertyValue('--fade-out-delay');
-    const messageFadeOutDuration = getComputedStyle(document.documentElement).getPropertyValue('--fade-out-duration');
-    const messageRemovalTimeMs = css_time_to_milliseconds(messageFadeOutDelay) + css_time_to_milliseconds(messageFadeOutDuration) + 100;
+    const messageFadeOutDelay = getComputedStyle(document.documentElement).getPropertyValue('--fade-out-delay')
+    const messageFadeOutDuration = getComputedStyle(document.documentElement).getPropertyValue('--fade-out-duration')
+    const messageRemovalTimeMs = css_time_to_milliseconds(messageFadeOutDelay) + css_time_to_milliseconds(messageFadeOutDuration) + 100
 
-    const namecolors = ["Blue", "Coral", "DodgerBlue", "SpringGreen", "YellowGreen", "Green", "OrangeRed", "Red", "GoldenRod", "HotPink", "CadetBlue", "SeaGreen", "Chocolate", "BlueViolet", "Firebrick"];
+    const namecolors = [
+      "Blue",
+      "Coral",
+      "DodgerBlue",
+      "SpringGreen",
+      "YellowGreen",
+      "Green",
+      "OrangeRed",
+      "Red",
+      "GoldenRod",
+      "HotPink",
+      "CadetBlue",
+      "SeaGreen",
+      "Chocolate",
+      "BlueViolet",
+      "Firebrick"
+    ]
 
-    fetch("https://badges.twitch.tv/v1/badges/global/display").then(res => res.json()).then(badgesData => {
+    let badgeSetsChannel = null
+    let badgeSetsGlobal = null
+    fetch("https://badges.twitch.tv/v1/badges/global/display")
+      .then(res => res.json())
+      .then(json => badgeSetsGlobal = json.badge_sets)
 
-      const badgesDataSet = badgesData;
+    // TMI Handlers:
+    const onConnectedHandler = (host, port) => console.info(`Connected to ${host}:${port}`)
+    const onConnectErrorHandler = error => chatlog.innerHTML = `Failed to connect! Error: ${error}`
+    const onMessageHandler = (channel, context, msg, self) => {
 
-      // Called every time the bot connects to Twitch chat
-      function onConnectedHandler(addr, port) {
-        console.log(`* Connected to ${addr}:${port}`);
+      const messageNode = msgTemplate.content.cloneNode(true)
+
+      /*
+      * USERNAME
+      */
+      const nameNode = messageNode.querySelector(".name")
+      const displayname = context["display-name"]
+      nameNode.innerHTML = displayname
+      if (context["color"] !== null) {
+        nameNode.style.color = context["color"]
+      } else {
+        nameNode.style.color = namecolors[displayname.charCodeAt(displayname.length - 1) % namecolors.length]
       }
 
-      function onConnectError(error) {
-        console.error(error);
-        chatlog.innerHTML = "Failed to connect check identity settings";
+      /*
+      * BADGES
+      */
+      const badgesNode = messageNode.querySelector(".badges")
+      const badges = context["badges"]
+      // HACK: get channel-id w/o AUTH (Thx Twitch API)
+      if (badgeSetsChannel === null)
+        fetch(`https://badges.twitch.tv/v1/badges/channels/${context['room-id']}/display`)
+          .then(res => res.json())
+          .then(json => badgeSetsChannel = json.badge_sets)
+      for (const badge in badges) {
+        try {
+          // Prepare badge stuff
+          const badgeVersion = badges[badge]
+          let urls = badgeSetsGlobal[badge].versions[badgeVersion]
+          if (!urls) urls = badgeSetsChannel[badge].versions[badgeVersion]
+          // Add badge to message
+          const badgeImg = document.createElement("img")
+          badgeImg.className = "badge"
+          badgeImg.src = urls.image_url_1x
+          badgesNode.appendChild(badgeImg)
+        } catch (error) {
+          console.error('Failed to ADD badge', badge, 'to message', msg, '! Error:', error)
+        }
       }
 
-      // Called every time a message comes in
-      function onMessageHandler(channel, context, msg, self) {
-        const messageNode = template.content.cloneNode(true);
-
-        // Username
-        const nameNode = messageNode.querySelector(".name");
-        const displayname = context["display-name"];
-        nameNode.innerHTML = displayname;
-        if (context["color"] != null) {
-          nameNode.style.color = context["color"];
-        } else {
-          nameNode.style.color = namecolors[displayname.charCodeAt(displayname.length - 1) % namecolors.length];
-        }
-
-        // Userbadges
-        const badgesNode = messageNode.querySelector(".badges");
-        const badges = context["badges"];
-        for (const badge in badges) {
-          const badgeImg = document.createElement("img");
-          badgeImg.src = badgesDataSet.badge_sets[badge].versions[badges[badge]].image_url_1x;
-          badgeImg.className = "badge";
-          badgesNode.appendChild(badgeImg);
-        }
-
-        // Emotes
-        let msgWithEmotes = msg;
-        const emotes = context["emotes"];
+      /*
+      * EMOTES
+      */
+      try {
+        let msgWithEmotes = msg
+        const emotes = context["emotes"]
         for (const emote in emotes) {
-          const emoteImgSrc = `https://static-cdn.jtvnw.net/emoticons/v2/${emote}/default/dark/1.0`;
-          const firstEmoteOccurance = emotes[emote][0].split("-");
-          const emoteString = msg.substring(parseInt(firstEmoteOccurance[0]), parseInt(firstEmoteOccurance[1]) + 1);
-          const emoteImg = `<span class="emote"><img src="${emoteImgSrc}" alt="${emoteString}"></span>`;
-          msgWithEmotes = msgWithEmotes.replaceAll(emoteString, emoteImg);
+          const emoteImgSrc = `https://static-cdn.jtvnw.net/emoticons/v2/${emote}/default/dark/1.0`
+          const firstEmoteOccurance = emotes[emote][0].split("-")
+          const emoteString = msg.substring(parseInt(firstEmoteOccurance[0]), parseInt(firstEmoteOccurance[1]) + 1)
+          const emoteImg = `<span class="emote"><img src="${emoteImgSrc}" alt="${emoteString}"></span>`
+          msgWithEmotes = msgWithEmotes.replace(new RegExp(escapeRegex(emoteString), 'g'), emoteImg)
         }
-        messageNode.querySelector(".message").innerHTML = msgWithEmotes;
-
-        // Add message
-        chatlogNode.appendChild(messageNode);
-
-        // Remove message after fade out animation
-        setTimeout(() => {
-          chatlogNode.firstChild.remove();
-        }, messageRemovalTimeMs);
+        messageNode.querySelector(".message").innerHTML = msgWithEmotes
+      } catch (error) {
+        messageNode.querySelector(".message").innerHTML = msg
       }
 
-      const client = new tmi.Client(opts);
 
-      // Register our event handlers (defined above)
-      client.on('message', onMessageHandler);
-      client.on('connected', onConnectedHandler);
+      // Add message
+      chatlogNode.appendChild(messageNode)
 
-      // Connect to Twitch:
-      client.connect().catch(onConnectError);
+      // Remove message after fade out animation
+      setTimeout(() => chatlogNode.firstChild.remove(), messageRemovalTimeMs)
+    }
 
-    })
+    const client = new tmi.Client(opts)
+    // Register event handlers:
+    client.on('message', onMessageHandler)
+    client.on('connected', onConnectedHandler)
+    // Connect to Twitch:
+    client.connect().catch(onConnectErrorHandler)
 
   </script>
 </body>
