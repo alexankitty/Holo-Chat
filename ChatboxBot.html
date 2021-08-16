@@ -160,6 +160,10 @@
       channels: ["CHANNEL_NAME"]
     }
 
+    // Use Channel name from HASH
+    const hash = window.location.hash
+    if(hash) opts.channels[0] = hash 
+    
     /* 
      * CSS Time to Milliseconds
      * by Jake Bellacera (http://jakebellacera.com)
