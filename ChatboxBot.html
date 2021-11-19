@@ -275,15 +275,17 @@
           const emotes = context["emotes"]
            for(let i = 0; i < msgWithEmotes.length; i++) {
               let emoteChecked = false;
-              for (const emote in emotes) {//TODO: Make this simpler?
+              for (const emote in emotes) {
                 const firstEmoteOccurance = emotes[emote][0].split("-")
                 const emoteString = msg.substring(parseInt(firstEmoteOccurance[0]), parseInt(firstEmoteOccurance[1]) + 1)
                 if(emoteString == msgWithEmotes[i]){
                   const emoteImgSrc = `https://static-cdn.jtvnw.net/emoticons/v2/${emote}/default/dark/1.0`
-                  let text = document.createElement('span');
-                  text.innerText = fragment;
-                  messageNode.querySelector(".message").appendChild(text);
-                  fragment = ""; //dump the text fragment because we need to append a new span
+                  if(fragment !== ""){
+                    let text = document.createElement('span');
+                    text.innerText = fragment;
+                    messageNode.querySelector(".message").appendChild(text);
+                    fragment = ""; //dump the text fragment because we need to append a new span
+                  }
                   const emoteImg = `<img src="${emoteImgSrc}" alt="${emoteString}">`
                   const emoteSpan = document.createElement('span');
                   emoteSpan.className = "emote"
