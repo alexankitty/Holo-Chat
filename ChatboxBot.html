@@ -272,6 +272,7 @@
         try { 
           let msgWithEmotes = msg.split(" ");
           let fragment = "";
+          let messageNodeClass = messageNode.querySelector(".message")
           const emotes = context["emotes"]
            for(let i = 0; i < msgWithEmotes.length; i++) {
               let emoteChecked = false;
@@ -283,14 +284,14 @@
                   if(fragment !== ""){
                     let text = document.createElement('span');
                     text.innerText = fragment;
-                    messageNode.querySelector(".message").appendChild(text);
+                    messageNodeClass.appendChild(text);
                     fragment = ""; //dump the text fragment because we need to append a new span
                   }
                   const emoteImg = `<img src="${emoteImgSrc}" alt="${emoteString}">`
                   const emoteSpan = document.createElement('span');
                   emoteSpan.className = "emote"
                   emoteSpan.innerHTML = emoteImg;
-                  messageNode.querySelector(".message").appendChild(emoteSpan);
+                  messageNodeClass.appendChild(emoteSpan);
                   emoteChecked = true;
                 }
               } 
@@ -301,12 +302,12 @@
             if(i == msgWithEmotes.length - 1) { // arrays start at 0
               let text = document.createElement('span');
               text.innerText = fragment;
-              messageNode.querySelector(".message").appendChild(text);
+              messageNodeClass.appendChild(text);
             }
           }
 
         } catch (error) {
-          messageNode.querySelector(".message").innerText = msg
+          messageNodeClass.innerText = msg
         }
 
 
