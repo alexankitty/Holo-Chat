@@ -185,9 +185,9 @@
       }
     }
 
-    function escapeRegex(string) {
+    /*function escapeRegex(string) { //Unneeded, keeping for preservation
       return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-    }
+    }*/
 
     const chatlogNode = document.querySelector("#chatlog")
     const msgTemplate = document.querySelector("#chatmessage")
@@ -266,23 +266,49 @@
         }
       }
 
-      /*
-      * EMOTES
-      */
-      try {
-        let msgWithEmotes = msg
-        const emotes = context["emotes"]
-        for (const emote in emotes) {
-          const emoteImgSrc = `https://static-cdn.jtvnw.net/emoticons/v2/${emote}/default/dark/1.0`
-          const firstEmoteOccurance = emotes[emote][0].split("-")
-          const emoteString = msg.substring(parseInt(firstEmoteOccurance[0]), parseInt(firstEmoteOccurance[1]) + 1)
-          const emoteImg = `<span class="emote"><img src="${emoteImgSrc}" alt="${emoteString}"></span>`
-          msgWithEmotes = msgWithEmotes.replace(new RegExp(escapeRegex(emoteString), 'g'), emoteImg)
+        /*
+        * EMOTES
+        */
+        try { 
+          let msgWithEmotes = msg.split(" ");
+          let fragment = "";
+          let messageNodeClass = messageNode.querySelector(".message")
+          const emotes = context["emotes"]
+           for(let i = 0; i < msgWithEmotes.length; i++) {
+              let emoteChecked = false;
+              for (const emote in emotes) {
+                const firstEmoteOccurance = emotes[emote][0].split("-")
+                const emoteString = msg.substring(parseInt(firstEmoteOccurance[0]), parseInt(firstEmoteOccurance[1]) + 1)
+                if(emoteString == msgWithEmotes[i]){
+                  const emoteImgSrc = `https://static-cdn.jtvnw.net/emoticons/v2/${emote}/default/dark/1.0`
+                  if(fragment !== ""){
+                    let text = document.createElement('span');
+                    text.innerText = fragment;
+                    messageNodeClass.appendChild(text);
+                    fragment = ""; //dump the text fragment because we need to append a new span
+                  }
+                  const emoteImg = `<img src="${emoteImgSrc}" alt="${emoteString}">`
+                  const emoteSpan = document.createElement('span');
+                  emoteSpan.className = "emote"
+                  emoteSpan.innerHTML = emoteImg;
+                  messageNodeClass.appendChild(emoteSpan);
+                  emoteChecked = true;
+                }
+              } 
+            if(!emoteChecked){
+              fragment += `${msgWithEmotes[i]} `
+              console.log(fragment);
+            }
+            if(i == msgWithEmotes.length - 1) { // arrays start at 0
+              let text = document.createElement('span');
+              text.innerText = fragment;
+              messageNodeClass.appendChild(text);
+            }
+          }
+
+        } catch (error) {
+          messageNodeClass.innerText = msg
         }
-        messageNode.querySelector(".message").innerHTML = msgWithEmotes
-      } catch (error) {
-        messageNode.querySelector(".message").innerHTML = msg
-      }
 
 
       // Add message
