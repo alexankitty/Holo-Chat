@@ -19,9 +19,63 @@
 
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="settings" class="settingsHide">
+    <form>
+      <hr>
+      <label>API Settings</label>
+      <hr>
+      <label for="ClientID">Client ID: </label>
+      <input type="text" id="ClientID" name="ClientID"><br>
+      <label for="ClientSecret">Client Secret: </label>
+      <input type="text" id="ClientSecret" name="ClientSecret"><br>
+      <label for="channel">Channel Name: </label>
+      <input type="text" id="channel" name="channel"><br>
+      <label for="override">Override YAML: </label>
+      <input type="checkbox" id="override" name="override"><br>
+      <hr>
+      <label>Options</label>
+      <hr>
+      <label for="pfp">Profile Picture: </label>
+      <input type="checkbox" id="pfp" name="pfp"><br>
+      <label for="badge">Badges: </label>
+      <input type="checkbox" id="badge" name="badge"><br>
+      <label for="pfpcircle">Circle PFPs: </label>
+      <input type="checkbox" id="pfpcircle" name="pfpcircle"><br>
+      <label for="sfb">Start From Bottom: </label>
+      <input type="checkbox" id="sfb" name="sfb"><br>
+      <hr>
+      <label>Appearance</label>
+      <hr>
+      <label for="textsize">Text Size: </label>
+      <input type="text" id="textsize" name="textsize"><label>px</label><br>
+      <label for="bgcolor">Background Color: </label>
+      <input type="text" id="bgcolor" name="bgcolor"><br>
+      <label for="bgopacity">Background Opacity: </label>
+      <input type="text" id="bgopacity" name="bgopacity"><br>
+      <label for="fontname">Font Name: </label>
+      <input type="text" id="fontname" name="fontname"><br>
+      <label for="fontweight">Font Weight: </label>
+      <input type="text" id="fontweight" name="fontweight"><br>
+      <label for="googlefont">Google Fonts: </label>
+      <input type="checkbox" id="googlefont" name="googlefont"><br>
+      <hr>
+      <label>Emotes</label>
+      <hr>
+      <label for="bttv">BTTV: </label>
+      <input type="checkbox" id="bttv" name="bttv"><br>
+      <label for="ffz">FFZ: </label>
+      <input type="checkbox" id="ffz" name="ffz"><br>
+      <label for="7tv">7TV: </label>
+      <input type="checkbox" id="7tv" name="7tv"><br>
+      <button type="button" onclick="saveSettings()" formmethod="post">Save</button>
+      <button type="button" onclick="hideSettings()" formmethod="post">Cancel</button>
+    </form>
+  </div>
+  <div id="background"></div>
+  <div id="chatlog"></div>
+  
 
-<div id="background"></div>
-<div id="chatlog"></div>
+
 </div>
 
 

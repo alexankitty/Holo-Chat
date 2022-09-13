@@ -1,4 +1,26 @@
 let styleOverride;
+let is_fired = false;
+const settingStore = new APIStorageObject("settings");
+const override = new APIStorageObject("override");
+const settingsForm = document.getElementById("settings");
+const ClientIDField = document.getElementById("ClientID");
+const ClientSecretField = document.getElementById("ClientSecret");
+const overrideField = document.getElementById("override");
+const ChannelField = document.getElementById("channel");
+const pfpField = document.getElementById("pfp");
+const badgeField = document.getElementById("badge")
+const pfpCircleField = document.getElementById("pfpcircle")
+const sfbField = document.getElementById("sfb");
+const textSizeField = document.getElementById("textsize");
+const bgColorField = document.getElementById("bgcolor");
+const bgOpacityField = document.getElementById("bgopacity");
+const fontNameField = document.getElementById("fontname")
+const fontWeightField = document.getElementById("fontweight");
+const googleFontField = document.getElementById("googlefont")
+const bttvField = document.getElementById("bttv");
+const ffzField = document.getElementById("ffz");
+const sevenTvField = document.getElementById("7tv");
+
 
 function loadSettings() {
     if(settings.api.ClientID !== null){
@@ -56,7 +78,68 @@ function loadSettings() {
 
 }
 
+function populateSettings(){
+    if(settings.options.firstRun){
+        showSettings();
+    }
+    ClientIDField.value = settings.api.ClientID;
+    ClientSecretField.value = settings.api.ClientSecret;
+    if(override.value == "true") {
+        overrideField.checked = true;
+    }
+    ChannelField.value = settings.tmi.channel;
+    pfpField.checked = settings.options.pfp;
+    badgeField.checked = settings.options.badge;
+    pfpCircleField.checked = settings.options.pfpCircle;
+    sfbField.checked = settings.options.startFromBottom;
+    textSizeField.value = settings.options.txtSize;
+    bgColorField.value = settings.options.bgColor;
+    bgOpacityField.value = settings.options.bgOpacity;
+    fontNameField.value = settings.options.fontName;
+    fontWeightField.value = settings.options.fontWeight;
+    googleFontField.checked = settings.options.googleFont;
+    bttvField.checked = settings.options.bttv;
+    ffzField.checked = settings.options.ffz;
+    sevenTvField.checked = settings.options.seventv;
+}
 
+function saveSettings() {
+    if(ClientIDField.value == ''){
+        settings.api.ClientID = null;
+    }
+    else{
+        settings.api.ClientID = ClientIDField.value;
+    }
+    settings.api.ClientSecret = ClientSecretField.value;
+    settings.tmi.channel = ChannelField.value;
+    override.value = overrideField.checked;
+    settings.options.pfp = pfpField.checked;
+    settings.options.badge = badgeField.checked;
+    settings.options.pfpCircle = pfpCircleField.checked;
+    settings.options.startFromBottom = sfbField.checked;
+    settings.options.txtSize = textSizeField.value;
+    settings.options.bgColor =  bgColorField.value;
+    settings.options.bgOpacity = bgOpacityField.value;
+    settings.options.fontName = fontNameField.value;
+    settings.options.fontWeight = fontWeightField.value;
+    settings.options.googleFont = googleFontField.checked;
+    settings.options.bttv = bttvField.checked;
+    settings.options.ffz = ffzField.checked;
+    settings.options.seventv = sevenTvField.checked;
+    settings.options.firstRun = false;
+    settingStore.value = jsYaml.dump(settings);
+    hideSettings();
+    location.reload();//might be unnecessary in the future
+}
+
+function hideSettings(){
+    is_fired = false;
+    settingsForm.classList.add("settingsHide");
+}
+
+function showSettings() {
+    settingsForm.classList.remove("settingsHide");
+}
 
 async function main() {
     settings = await fetchSettings(settingsPath);
@@ -67,12 +150,19 @@ async function main() {
         tmiEmoteParse.setTwitchCredentials(API.ClientID, API.Token.value)
         tmiEmoteParse.loadAssets(tmiOpts.channels[0], {"bttv": settings.options.bttv, "ffz": settings.options.ffz, "7tv": settings.options.seventv})
     }
+    populateSettings();
     const client = new tmi.Client(tmiOpts)
     // Register event handlers:
     client.on('message', onMessageHandler)
     client.on('connected', onConnectedHandler)
     // Connect to Twitch:
     client.connect().catch(onConnectErrorHandler)
+    addEventListener("keydown", function(e){
+        if (e.keyCode === 13 && is_fired == false) {
+            showSettings();
+            is_fired = true
+        }
+    });
 }
 
 

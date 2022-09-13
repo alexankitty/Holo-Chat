@@ -79,7 +79,7 @@
         const nameNode = messageNode.querySelector(".name")
         if(settings.options.pfp && !settings.options.apiDisable) {
           const pfpImg = document.createElement("img");
-          pfpImg.style.height = `${settings.options.txtSize + 5}px`;
+          pfpImg.style.height = `${parseInt(settings.options.txtSize) + 5}px`;
           pfpImg.className = 'pfp';
           if(settings.options.pfpCircle){
             pfpImg.style.borderRadius = "50%";
