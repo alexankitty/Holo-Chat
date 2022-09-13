@@ -1,17 +1,22 @@
 # twitch-chatbox-bot
 
-Simple HTML page that can be used to display Twitch chat
+Simple HTML page that can be used to display Twitch chat with customizable options
 
 ## Usage with OBS Studio
 
 ### Basic Configuration
+![Settings GUI for adjusting configs](https://user-images.githubusercontent.com/45508320/190004583-7dc964a9-2547-46f2-aab2-5e172a346459.png)
+1. Create an application at https://dev.twitch.tv/console (optional: if you don't do this it will run in legacy mode which does not support pfp and emote platforms)
+![Add OBS Source](https://github.com/alexankitty/twitch-chatbox-bot/blob/main/docs/obs%20source.png?raw=true)
+2. Add an OBS source and size it to your liking (might want to adjust it large first) and point it to https://alexankitty.github.io/twitch-chatbox-bot/ChatboxBot.html#CHANNELNAME (channelname is optional.)
+![Interact wit hthe source for settings](https://github.com/alexankitty/twitch-chatbox-bot/blob/main/docs/interact.png?raw=true)
+3. Right click the source, click interact.
+4. Input ClientID and Secrets into the GUI (or settings.yaml if using that)
+5. Change the rest of the parameters to your liking
 
-1. Create an application at https://dev.twitch.tv/console
-2. Place ClientID and Client Secrets in twitchapi.js line 34 and 36 (may need to be simplifed). This is used for tmi-parse-emotes and for pulling pfps from twitch
-3. Place your channel name on line 31 of chat.js
-4. Customize opts in chat.js lines 1-16 to your liking.
-5. Change your font by using the import directive on line 1 and line 47 for the font-family in chat.css.
-6. Create a web browser source and either host on a nodejs server or point directly to the twitch-chatbox-bot.html file.
+## Advanced Configuration
+![YAML Config](https://github.com/alexankitty/twitch-chatbox-bot/blob/main/docs/configfile.png?raw=true)
+Create a settings.yaml in the root directory you're hosting the files from. Use something like light-server in nodejs. a settings.yaml being present will initially override the GUI settings, if you want the GUI instead, make sure to check Override YAML.
 
 ## Configuration Explanation
 * pfp: Shows twitch users profile pictures.
@@ -26,12 +31,12 @@ Simple HTML page that can be used to display Twitch chat
 
 ## Thanks
 
-TMI.JS: https://github.com/tmijs/tmi.js
-tmi-emote-parse https://github.com/smilefx/tmi-emote-parse
+* TMI.JS: https://github.com/tmijs/tmi.js
+* tmi-emote-parse https://github.com/smilefx/tmi-emote-parse
+* steve1337 for the code this is based on https://github.com/steve1337/twitch-chatbox-bot
 
 ## Known Issues
 1. Getting channel badges anonymously is not supported by Twitch API and implemented with a hack
-
 ## OBS Guide (deprecated instructions, see above.)
 1. Download ChatboxBot.html
 1. Change the channel name and customize anything else you want to change
@@ -44,3 +49,8 @@ tmi-emote-parse https://github.com/smilefx/tmi-emote-parse
 * Additional configuration options
 * BTTV, FFZ, and 7TV emote support in addition to the standard twitch emotes.
 * Profile picture display.
+* Caching to restore chat when changing browser sources/persistence.
+* Animations
+* Settings GUI
+
+
