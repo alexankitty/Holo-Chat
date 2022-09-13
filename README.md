@@ -10,7 +10,8 @@ Simple HTML page that can be used to display Twitch chat
 2. Place ClientID and Client Secrets in twitchapi.js line 34 and 36 (may need to be simplifed). This is used for tmi-parse-emotes and for pulling pfps from twitch
 3. Place your channel name on line 31 of chat.js
 4. Customize opts in chat.js lines 1-16 to your liking.
-5. Create a web browser source and either host on a nodejs server or point directly to the twitch-chatbox-bot.html file.
+5. Change your font by using the import directive on line 1 and line 47 for the font-family in chat.css.
+6. Create a web browser source and either host on a nodejs server or point directly to the twitch-chatbox-bot.html file.
 
 ## Configuration Explanation
 * pfp: Shows twitch users profile pictures.
