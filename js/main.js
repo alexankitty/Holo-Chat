@@ -95,7 +95,7 @@ function loadSettings() {
         font-family: '${settings.options.fontName}';
     }
     .message-emote{
-      height: ${settings.options.txtSize + 5}px;
+      height: ${parseInt(settings.options.txtSize) + 5}px;
     }
     #chatlog {
       ${settings.options.startFromBottom ? "bottom:" : "top:"} 0;
