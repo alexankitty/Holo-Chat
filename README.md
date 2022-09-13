@@ -41,6 +41,7 @@ Create a settings.yaml in the root directory you're hosting the files from. Use 
 * TMI.JS: https://github.com/tmijs/tmi.js
 * tmi-emote-parse https://github.com/smilefx/tmi-emote-parse
 * steve1337 for the code this is based on https://github.com/steve1337/twitch-chatbox-bot
+* js-yaml https://github.com/nodeca/js-yaml
 
 ## Known Issues
 1. Getting channel badges anonymously is not supported by Twitch API and implemented with a hack
