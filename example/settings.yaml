@@ -14,9 +14,13 @@ options:
   messageTimeout: 0 #remove messages after x amount of time. Set to 0 to disable.
   messageLimit: 15 #delete messages after x amount have been received. Set to 0 to disable.
   cacheTTL: 60 #How long the message cache will live before we invalidate it in seconds. Set to 0 to disable. This is useful if you need to have multiple sized browser sources.
+  #fonts
+  googleFont: true
+  fontName: Roboto #We'll still use this font even if google font isn't turned on.
+  fontWeight: 700 #Check https://fonts.google.com for font sizings
   #below are for extra emote platforms
   bttv: true
   ffz: true
   seventv: true
 tmi:
-  channel: YourChannel
+  channel: YourChannel #This is ignored if you include a hash after the url

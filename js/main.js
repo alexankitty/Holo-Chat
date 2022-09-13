@@ -16,8 +16,22 @@ function loadSettings() {
     else{
         tmiOpts.channels[0] = settings.tmi.channel;
     }
+
+    //fonts
+    if(settings.options.googleFont){
+        WebFont.load({
+            google: {
+                families: [`${settings.options.fontName}:${settings.options.fontWeight}`]
+            }
+        })
+    }
+
     styleOverride=document.createElement('style');//customized CSS based on above options
-    styleOverride.innerHTML=`.message-emote{
+    styleOverride.innerHTML=`
+    html,body{
+        font-family: '${settings.options.fontName}';
+    }
+    .message-emote{
       height: ${settings.options.txtSize + 5}px;
     }
     #chatlog {
@@ -38,6 +52,8 @@ function loadSettings() {
             readCache();
         }
     }
+
+
 }
 
 
