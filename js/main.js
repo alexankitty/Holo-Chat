@@ -31,7 +31,16 @@ function loadSettings() {
     document.body.style.fontSize = `${settings.options.txtSize}px`
     bodyBg.style.backgroundColor = settings.options.bgColor;
     bodyBg.style.opacity = settings.options.bgOpacity;
+    if(settings.options.cacheTTL){
+        cached = new APIStorageObject("msgCache");
+        cacheExpiry = new APIStorageObject("cacheExpiry");
+        if(cached.value){
+            readCache();
+        }
+    }
 }
+
+
 
 async function main() {
     settings = await fetchSettings(settingsPath);
@@ -49,5 +58,7 @@ async function main() {
     // Connect to Twitch:
     client.connect().catch(onConnectErrorHandler)
 }
+
+
 
 main();

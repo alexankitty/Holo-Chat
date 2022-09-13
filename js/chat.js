@@ -41,8 +41,6 @@
       const chatlogNode = document.querySelector("#chatlog")
       const msgTemplate = document.querySelector("#chatmessage")
 
-      
-
       const namecolors = [
         "Blue",
         "Coral",
@@ -82,7 +80,6 @@
         if(settings.options.pfp && !settings.options.apiDisable) {
           const pfpImg = document.createElement("img");
           pfpImg.style.height = `${settings.options.txtSize + 5}px`;
-          //pfpImg.style.width  = `${opts.txtSize + 5}px`;
           pfpImg.className = 'pfp';
           if(settings.options.pfpCircle){
             pfpImg.style.borderRadius = "50%";
@@ -193,9 +190,12 @@
           }, settings.options.messageTimeout)
         }
         // Remove message if exceeded
-        if(chatlogNode.childElementCount > settings.options.messageLimit){
-          chatlogNode.firstElementChild.classList.add("delete")
-          await sleep(settings.options.messageFadeOutDuration)
-          chatlogNode.firstElementChild.remove();
-        }
+        if(settings.options.messageLimit !== 0){
+          if(chatlogNode.childElementCount > settings.options.messageLimit){
+            chatlogNode.firstElementChild.classList.add("delete")
+            await sleep(settings.options.messageFadeOutDuration)
+            chatlogNode.firstElementChild.remove();
+          }
+      }
+      saveCache();
       }
