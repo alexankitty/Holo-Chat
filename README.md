@@ -9,7 +9,9 @@ Simple HTML page that can be used to display Twitch chat with customizable optio
 1. Create an application at https://dev.twitch.tv/console (optional: if you don't do this it will run in legacy mode which does not support pfp and emote platforms)
 ![Add OBS Source](https://github.com/alexankitty/twitch-chatbox-bot/blob/main/docs/obs%20source.png?raw=true)
 2. Add an OBS source and size it to your liking (might want to adjust it large first) and point it to https://alexankitty.github.io/twitch-chatbox-bot/ChatboxBot.html#CHANNELNAME (channelname is optional.)
+
 ![Interact wit hthe source for settings](https://github.com/alexankitty/twitch-chatbox-bot/blob/main/docs/interact.png?raw=true)
+
 3. Right click the source, click interact.
 4. Input ClientID and Secrets into the GUI (or settings.yaml if using that)
 5. Change the rest of the parameters to your liking
