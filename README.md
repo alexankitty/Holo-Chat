@@ -16,6 +16,11 @@ Simple HTML page that can be used to display Twitch chat with customizable optio
 4. Input ClientID and Secrets into the GUI (or settings.yaml if using that)
 5. Change the rest of the parameters to your liking
 
+## Modifications
+1. Interact with the source.
+2. Click the window.
+3. Press Enter and the settings GUI will pull up. Pressing Save or Cancel will close it.
+
 ## Advanced Configuration
 ![YAML Config](https://github.com/alexankitty/twitch-chatbox-bot/blob/main/docs/configfile.png?raw=true)
 Create a settings.yaml in the root directory you're hosting the files from. Use something like light-server in nodejs. a settings.yaml being present will initially override the GUI settings, if you want the GUI instead, make sure to check Override YAML.
