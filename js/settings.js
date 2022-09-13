@@ -43,8 +43,9 @@ async function fetchSettings(path) {
         }
     }
     //grab local storage instead. Load defaults if not set
-    if(settingStore.value == null){
+    if(settingStore.value == null || settingStore.value == 'undefined' || settingStore.value == '[object Object]'){
         //load defaults
+        console.log("loading defaults")
         settings = defaultSettings;
         return settings;
     }

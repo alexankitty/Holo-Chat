@@ -22,6 +22,47 @@ const ffzField = document.getElementById("ffz");
 const sevenTvField = document.getElementById("7tv");
 
 
+function importYML(){
+    let files = document.getElementById('file').files;
+    if (files.length == 0) return;
+    const file = files[0];
+
+    let reader = new FileReader();
+    
+    reader.onload = (e) => {
+        const file = e.target.result;
+        try{
+            settings = jsYaml.load(file);
+            console.log(settings)
+            settingStore.value = jsYaml.dump(settings);
+            location.reload();
+            }
+            catch(e){
+                console.error(`${e} / Invalid YML data uploaded.`)
+                return;
+            }
+    }
+    reader.onerror = (e) => alert(e.target.error.name);
+    
+    reader.readAsText(file)
+}
+
+function exportYML() {
+    var settingExport = jsYaml.dump(settings);
+    var blob = new Blob([settingExport], {type: 'text/plain'});
+    // pass a useful mime type here
+    var url = URL.createObjectURL(blob);
+    fetch(url)
+    .then((res) => { return res.blob(); })
+    .then((data) => {
+    var a = document.createElement("a");
+    a.href = window.URL.createObjectURL(data);
+    a.download = "settings.yml";
+    a.click();
+    a.remove();
+});
+}
+
 function loadSettings() {
     if(settings.api.ClientID !== null){
         API.ClientID = settings.api.ClientID;

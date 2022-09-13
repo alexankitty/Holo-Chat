@@ -19,7 +19,8 @@
 
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
-  <div id="settings" class="settingsHide">
+  <div id="settings" class="settingsWrap settingsHide">
+  <div class="settings">
     <form>
       <hr>
       <label>API Settings</label>
@@ -67,10 +68,17 @@
       <input type="checkbox" id="ffz" name="ffz"><br>
       <label for="7tv">7TV: </label>
       <input type="checkbox" id="7tv" name="7tv"><br>
+      <hr>
+      <label>Import/Export</label>
+      <hr>
+      <input type="file" id="file" accept=".yaml,.yml"><button type="button" onclick="importYML()" formmethod="post">Import</button><br>
+      <button type="button" onclick="exportYML()" formmethod="post">Export</button>
+      <hr>
       <button type="button" onclick="saveSettings()" formmethod="post">Save</button>
       <button type="button" onclick="hideSettings()" formmethod="post">Cancel</button>
     </form>
   </div>
+</div>
   <div id="background"></div>
   <div id="chatlog"></div>
   
