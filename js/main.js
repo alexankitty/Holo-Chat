@@ -1,8 +1,14 @@
 let styleOverride;
 
 function loadSettings() {
-    API.ClientID = settings.api.ClientID;
-    API.ClientSecret = settings.api.ClientSecret;
+    if(settings.api.ClientID !== null){
+        API.ClientID = settings.api.ClientID;
+        API.ClientSecret = settings.api.ClientSecret;
+        settings.options.apiDisable = false;
+    }
+    if(settings.api.ClientID == null){
+        settings.options.apiDisable = true;
+    }
     const hash = window.location.hash
     if(hash) {
     tmiOpts.channels[0] = hash;
@@ -31,9 +37,11 @@ async function main() {
     settings = await fetchSettings(settingsPath);
     loadSettings();
     document.body.appendChild(styleOverride);
-    API.authorize();
-    tmiEmoteParse.setTwitchCredentials(API.ClientID, API.Token.value)
-    tmiEmoteParse.loadAssets(tmiOpts.channels[0], {"bttv": settings.options.bttv, "ffz": settings.options.ffz, "7tv": settings.options.seventv})
+    if(!settings.options.apiDisable){//disable the API if it's not present.
+        API.authorize();
+        tmiEmoteParse.setTwitchCredentials(API.ClientID, API.Token.value)
+        tmiEmoteParse.loadAssets(tmiOpts.channels[0], {"bttv": settings.options.bttv, "ffz": settings.options.ffz, "7tv": settings.options.seventv})
+    }
     const client = new tmi.Client(tmiOpts)
     // Register event handlers:
     client.on('message', onMessageHandler)

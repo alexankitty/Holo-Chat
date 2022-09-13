@@ -79,7 +79,7 @@
         */
         const displayname = context["display-name"]
         const nameNode = messageNode.querySelector(".name")
-        if(settings.options.pfp) {
+        if(settings.options.pfp && !settings.options.apiDisable) {
           const pfpImg = document.createElement("img");
           pfpImg.style.height = `${settings.options.txtSize + 5}px`;
           //pfpImg.style.width  = `${opts.txtSize + 5}px`;
@@ -135,9 +135,52 @@
         * EMOTES
         */
         let messageNodeClass = messageNode.querySelector(".message")
-        let text = document.createElement('span');
-        text.innerHTML = await tmiEmoteParse.replaceEmotes(msg, context, channel, self); //let tmiemoteparse do the heavy lifting instead.
-        messageNodeClass.appendChild(text);
+        if(settings.options.apiDisable) {//legacy handling which disables pfp and extra emotes
+          try { 
+            let msgWithEmotes = msg.split(" ");
+            let fragment = "";
+            const emotes = context["emotes"]
+             for(let i = 0; i < msgWithEmotes.length; i++) {
+                let emoteChecked = false;
+                for (const emote in emotes) {
+                  const firstEmoteOccurance = emotes[emote][0].split("-")
+                  const emoteString = msg.substring(parseInt(firstEmoteOccurance[0]), parseInt(firstEmoteOccurance[1]) + 1)
+                  if(emoteString == msgWithEmotes[i]){
+                    const emoteImgSrc = `https://static-cdn.jtvnw.net/emoticons/v2/${emote}/default/dark/1.0`
+                    if(fragment !== ""){
+                      let text = document.createElement('span');
+                      text.innerText = fragment;
+                      messageNodeClass.appendChild(text);
+                      fragment = ""; //dump the text fragment because we need to append a new span
+                    }
+                    const emoteImg = `<img src="${emoteImgSrc}" alt="${emoteString}">`
+                    const emoteSpan = document.createElement('span');
+                    emoteSpan.className = "emote"
+                    emoteSpan.innerHTML = emoteImg;
+                    messageNodeClass.appendChild(emoteSpan);
+                    emoteChecked = true;
+                  }
+                } 
+              if(!emoteChecked){
+                fragment += `${msgWithEmotes[i]} `
+              }
+              if(i == msgWithEmotes.length - 1) { // arrays start at 0
+                let text = document.createElement('span');
+                text.innerText = fragment;
+                messageNodeClass.appendChild(text);
+              }
+            }
+  
+          } catch (error) {
+            messageNodeClass.innerText = msg
+          }
+        }
+
+        if(!settings.options.apiDisable){
+          let text = document.createElement('span');
+          text.innerHTML = await tmiEmoteParse.replaceEmotes(msg, context, channel, self); //let tmiemoteparse do the heavy lifting instead.
+          messageNodeClass.appendChild(text);
+        }
         // Add message
         chatlogNode.appendChild(messageNode)
 
