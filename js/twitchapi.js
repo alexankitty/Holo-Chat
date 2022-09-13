@@ -25,7 +25,7 @@ class APIStorageObject{
 	set valueAsDate(s) {
 		var d = new Date();
 		d.setSeconds(d.getSeconds() + s);
-		this.value = d;
+		this.value = d.getTime();
 	}
 }
 

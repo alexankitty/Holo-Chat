@@ -1,20 +1,3 @@
-
-    // Define configuration options
-    const opts = {
-        pfp: true,
-        badge: true,
-        txtSize: 25,//in px
-        pfpCircle: true, //displays as square or circle
-        bgColor: "black", //css colors or hex
-        startFromBottom: true,
-        bgOpacity: 0.5,
-        messageTimeout: 0, //in milliseconds, set to 0 to disable
-        //below are for extra emote platforms
-        bttv: true,
-        ffz: true,
-        seventv: true
-      }
-
       const tmiOpts = {
         options: {
         debug: false
@@ -30,10 +13,6 @@
         *****************************************************/
         channels: ["YourChannel"]
       }
-      // Use Channel name from HASH
-      const hash = window.location.hash
-      if(hash) tmiOpts.channels[0] = hash
-
       /*
        * CSS Time to Milliseconds
        * by Jake Bellacera (http://jakebellacera.com)
@@ -59,20 +38,8 @@
         return new Promise(resolve => setTimeout(resolve, ms));
       }
 
-      var S=document.createElement('style');//customized CSS based on above options
-      S.innerHTML=`.message-emote{
-        height: ${opts.txtSize + 5}px;
-        width: ${opts.txtSize + 5}px;
-      }
-      #chatlog {
-        ${opts.startFromBottom ? "bottom:" : "top:"} 0;
-      }`;
       const chatlogNode = document.querySelector("#chatlog")
       const msgTemplate = document.querySelector("#chatmessage")
-
-      const css = getComputedStyle(document.documentElement);
-      const messageFadeOutDelay = opts.messageTimeout;
-      const messageFadeOutDuration = css_time_to_milliseconds(getComputedStyle(document.documentElement).getPropertyValue('--fade-out-duration'))
 
       const namecolors = [
         "Blue",
@@ -110,12 +77,11 @@
         */
         const displayname = context["display-name"]
         const nameNode = messageNode.querySelector(".name")
-        if(opts.pfp) {
+        if(settings.options.pfp && !settings.options.apiDisable) {
           const pfpImg = document.createElement("img");
-          pfpImg.style.height = `${opts.txtSize + 5}px`;
-          pfpImg.style.width  = `${opts.txtSize + 5}px`;
+          pfpImg.style.height = `${parseInt(settings.options.txtSize) + 5}px`;
           pfpImg.className = 'pfp';
-          if(opts.pfpCircle){
+          if(settings.options.pfpCircle){
             pfpImg.style.borderRadius = "50%";
           }
           pfpImg.src = await getPFP(displayname);
@@ -137,7 +103,7 @@
         /*
         * BADGES
         */
-       if(opts.badge){
+       if(settings.options.badge){
         const badgesNode = messageNode.querySelector(".badges")
         const badges = context["badges"]
         // HACK: get channel-id w/o AUTH (Thx Twitch API)
@@ -166,32 +132,70 @@
         * EMOTES
         */
         let messageNodeClass = messageNode.querySelector(".message")
-        let text = document.createElement('span');
-        text.innerHTML = await tmiEmoteParse.replaceEmotes(msg, context, channel, self); //let tmiemoteparse do the heavy lifting instead.
-        messageNodeClass.appendChild(text);
+        if(settings.options.apiDisable) {//legacy handling which disables pfp and extra emotes
+          try { 
+            let msgWithEmotes = msg.split(" ");
+            let fragment = "";
+            const emotes = context["emotes"]
+             for(let i = 0; i < msgWithEmotes.length; i++) {
+                let emoteChecked = false;
+                for (const emote in emotes) {
+                  const firstEmoteOccurance = emotes[emote][0].split("-")
+                  const emoteString = msg.substring(parseInt(firstEmoteOccurance[0]), parseInt(firstEmoteOccurance[1]) + 1)
+                  if(emoteString == msgWithEmotes[i]){
+                    const emoteImgSrc = `https://static-cdn.jtvnw.net/emoticons/v2/${emote}/default/dark/1.0`
+                    if(fragment !== ""){
+                      let text = document.createElement('span');
+                      text.innerText = fragment;
+                      messageNodeClass.appendChild(text);
+                      fragment = ""; //dump the text fragment because we need to append a new span
+                    }
+                    const emoteImg = `<img src="${emoteImgSrc}" alt="${emoteString}">`
+                    const emoteSpan = document.createElement('span');
+                    emoteSpan.className = "emote"
+                    emoteSpan.innerHTML = emoteImg;
+                    messageNodeClass.appendChild(emoteSpan);
+                    emoteChecked = true;
+                  }
+                } 
+              if(!emoteChecked){
+                fragment += `${msgWithEmotes[i]} `
+              }
+              if(i == msgWithEmotes.length - 1) { // arrays start at 0
+                let text = document.createElement('span');
+                text.innerText = fragment;
+                messageNodeClass.appendChild(text);
+              }
+            }
+  
+          } catch (error) {
+            messageNodeClass.innerText = msg
+          }
+        }
+
+        if(!settings.options.apiDisable){
+          let text = document.createElement('span');
+          text.innerHTML = await tmiEmoteParse.replaceEmotes(msg, context, channel, self); //let tmiemoteparse do the heavy lifting instead.
+          messageNodeClass.appendChild(text);
+        }
         // Add message
         chatlogNode.appendChild(messageNode)
 
         // Remove message after fade out animation
-        if(messageFadeOutDelay){
+        if(settings.options.messageTimeout){
           setTimeout(async () => {
             chatlogNode.firstElementChild.classList.add("delete")
-            await sleep(messageFadeOutDuration)
+            await sleep(settings.options.messageFadeOutDuration)
             chatlogNode.firstElementChild.remove();
-          }, messageFadeOutDelay)
+          }, settings.options.messageTimeout)
         }
+        // Remove message if exceeded
+        if(settings.options.messageLimit !== 0){
+          if(chatlogNode.childElementCount > settings.options.messageLimit){
+            chatlogNode.firstElementChild.classList.add("delete")
+            await sleep(settings.options.messageFadeOutDuration)
+            chatlogNode.firstElementChild.remove();
+          }
       }
-      const bodyBg = document.getElementById("background");
-      document.body.style.fontSize = `${opts.txtSize}px`
-      bodyBg.style.backgroundColor = opts.bgColor;
-      bodyBg.style.opacity = opts.bgOpacity;
-      document.body.appendChild(S);
-      API.authorize();
-      tmiEmoteParse.setTwitchCredentials(API.ClientID, API.Token.value)
-      tmiEmoteParse.loadAssets(tmiOpts.channels[0], {"bttv": opts.bttv, "ffz": opts.ffz, "7tv": opts.seventv})
-      const client = new tmi.Client(tmiOpts)
-      // Register event handlers:
-      client.on('message', onMessageHandler)
-      client.on('connected', onConnectedHandler)
-      // Connect to Twitch:
-      client.connect().catch(onConnectErrorHandler)
+      saveCache();
+      }
