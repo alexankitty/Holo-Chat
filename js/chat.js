@@ -192,4 +192,10 @@
             chatlogNode.firstElementChild.remove();
           }, settings.options.messageTimeout)
         }
+        // Remove message if exceeded
+        if(chatlogNode.childElementCount > settings.options.messageLimit){
+          chatlogNode.firstElementChild.classList.add("delete")
+          await sleep(settings.options.messageFadeOutDuration)
+          chatlogNode.firstElementChild.remove();
+        }
       }

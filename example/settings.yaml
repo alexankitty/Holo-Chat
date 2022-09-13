@@ -10,7 +10,9 @@ options:
   bgColor: "black" #css or hex
   startFromBottom: true
   bgOpacity: 0.5
-  messageTimeout: 0
+  #message handling
+  messageTimeout: 0 #remove messages after x amount of time. Set to 0 to disable.
+  messageLimit: 15 #delete messages after x amount have been received. Set to 0 to disable.
   #below are for extra emote platforms
   bttv: true
   ffz: true
