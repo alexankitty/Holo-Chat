@@ -1,0 +1,130 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:700);
+
+* {
+  box-sizing: border-box;
+}
+
+/*****************************************************
+  *                                                    *
+  * Change this to make the animation faster or slower *
+  *                                                    *
+  ******************************************************/
+:root {
+  --fade-in-duration: .3s;
+  --fade-out-delay: 15s;
+  --fade-out-duration: .5s;
+}
+
+@keyframes fadeInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(600px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+html, body {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  text-shadow: 0 0 1px #000, 0 0 2px #000;
+  background: none;
+  font-family: 'Didact Gothic';
+  color: white;
+}
+#background {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+#chatlog {
+  display: table;
+  position: absolute;
+  left: 0;
+  padding: 0 10px 10px;
+  table-layout: fixed;
+  width:100%;
+}
+
+#chatlog>div {
+  display: table-row;
+}
+
+#chatlog>div {
+  animation: fadeInRight var(--fade-in-duration) ease forwards;/*, fadeOut var(--fade-out-duration) ease var(--fade-out-delay) forwards;*/
+}
+.delete {
+  animation: fadeOut var(--fade-out-duration) ease forwards!important;
+}
+
+#chatlog>div.deleted {
+  visibility: hidden;
+}
+
+#chatlog .emote {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  padding: 0.4em 0.2em;
+  position: relative;
+}
+
+#chatlog .emote img {
+  display: inline-block;
+  height: 1.5em;
+  vertical-align: middle;
+}
+
+#chatlog .message,
+#chatlog .meta {
+  display: inline;
+}
+
+#chatlog .meta {
+  text-align: right;
+  padding-right: 5px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+#chatlog .message {
+  word-wrap: break-word;
+}
+
+#chatlog .badge {
+  display: inline-block;
+  margin-right: 5px;
+  position: relative;
+  vertical-align: baseline;
+}
+
+#chatlog .name {
+
+}
+
+.pfp {
+  vertical-align: text-top;
+  margin-right: 5px;
+}
+
+.message-emote {
+  vertical-align: text-top;
+}
