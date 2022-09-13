@@ -38,3 +38,8 @@ tmi-emote-parse https://github.com/smilefx/tmi-emote-parse
 1. Add browser source for local file and select the customized ChatboxBot.html
  ![Add browser source for local file and select the customized ChatboxBot.html](https://raw.githubusercontent.com/steve1337/twitch-chatbox-bot/main/docs/add-browser-source.png)
 1. Done :)
+
+## New Features
+* Additional configuration options
+* BTTV, FFZ, and 7TV emote support in addition to the standard twitch emotes.
+* Profile picture display.
