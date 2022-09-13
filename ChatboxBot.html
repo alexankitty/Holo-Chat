@@ -2,131 +2,17 @@
 <html lang="en">
 
 <head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Didact+Gothic&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/chat.css"/> 
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#000000" />
   <title>Twitch-Chatbox-Bot</title>
 
   <style>
-    @import url(https://fonts.googleapis.com/css?family=Roboto:700);
 
-    * {
-      box-sizing: border-box;
-    }
-
-    /*****************************************************
-      *                                                    *
-      * Change this to make the animation faster or slower *
-      *                                                    *
-      ******************************************************/
-    :root {
-      --fade-in-duration: .3s;
-      --fade-out-delay: 15s;
-      --fade-out-duration: .5s;
-    }
-
-    @keyframes fadeInRight {
-      0% {
-        opacity: 0;
-        transform: translateX(600px);
-      }
-
-      100% {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-
-    @keyframes fadeOut {
-      0% {
-        opacity: 1;
-      }
-
-      100% {
-        opacity: 0;
-      }
-    }
-
-    html {
-      height: 100%;
-      overflow: hidden;
-      text-shadow: 0 0 1px #000, 0 0 2px #000;
-      background: none;
-      font-family: 'Roboto';
-      font-weight: 700;
-      font-size: 1em;
-      line-height: 1.5em;
-      color: white;
-    }
-
-    #chatlog {
-      display: table;
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      padding: 0 10px 10px;
-      width: 100%;
-      table-layout: fixed;
-    }
-
-    #chatlog>div {
-      display: table-row;
-    }
-
-    #chatlog>div {
-      animation: fadeInRight var(--fade-in-duration) ease forwards, fadeOut var(--fade-out-duration) ease var(--fade-out-delay) forwards;
-    }
-
-    #chatlog>div.deleted {
-      visibility: hidden;
-    }
-
-    #chatlog .emote {
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: contain;
-      padding: 0.4em 0.2em;
-      position: relative;
-    }
-
-    #chatlog .emote img {
-      display: inline-block;
-      height: 1em;
-    }
-
-    #chatlog .message,
-    #chatlog .meta {
-      vertical-align: top;
-      display: table-cell;
-      padding-bottom: 0.1em;
-    }
-
-    #chatlog .meta {
-      width: 35%;
-      text-align: right;
-      padding-right: 0.5em;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
-    }
-
-    #chatlog .message {
-      word-wrap: break-word;
-      width: 65%;
-    }
-
-    #chatlog .badge {
-      display: inline-block;
-      margin-right: 0.2em;
-      position: relative;
-      height: 1em;
-      vertical-align: middle;
-      top: -0.1em;
-    }
-
-    #chatlog .name {
-      margin-left: 0.2em;
-    }
   </style>
 
 </head>
@@ -134,7 +20,11 @@
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
 
-  <div id="chatlog"></div>
+<div id="background"></div>
+<div id="chatlog"></div>
+</div>
+
+
 
   <template id="chatmessage">
     <div>
@@ -146,185 +36,13 @@
       <span class="message"></span>
     </div>
   </template>
-
-  <script src="https://github.com/tmijs/tmi.js/releases/download/v1.8.4/tmi.min.js"></script>
-  <script type="module">
-
-    // Define configuration options
-    const opts = {
-      /****************************************************
-      *                                                   *
-      *       Change this to your channel name            *
-      *                                                   *
-      *****************************************************/
-      channels: ["CHANNEL_NAME"]
-    }
-
-    // Use Channel name from HASH
-    const hash = window.location.hash
-    if(hash) opts.channels[0] = hash 
-    
-    /* 
-     * CSS Time to Milliseconds
-     * by Jake Bellacera (http://jakebellacera.com)
-     * ============================================
-    */
-    function css_time_to_milliseconds(time_string) {
-      const num = parseFloat(time_string, 10)
-
-      let unit = time_string.match(/m?s/)
-      if (unit) unit = unit[0]
-
-      switch (unit) {
-        case "s": // seconds
-          return num * 1000
-        case "ms": // milliseconds
-          return num
-        default:
-          return 0
-      }
-    }
-
-    /*function escapeRegex(string) { //Unneeded, keeping for preservation
-      return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-    }*/
-
-    const chatlogNode = document.querySelector("#chatlog")
-    const msgTemplate = document.querySelector("#chatmessage")
-
-    const css = getComputedStyle(document.documentElement);
-    const messageFadeOutDelay = getComputedStyle(document.documentElement).getPropertyValue('--fade-out-delay')
-    const messageFadeOutDuration = getComputedStyle(document.documentElement).getPropertyValue('--fade-out-duration')
-    const messageRemovalTimeMs = css_time_to_milliseconds(messageFadeOutDelay) + css_time_to_milliseconds(messageFadeOutDuration) + 100
-
-    const namecolors = [
-      "Blue",
-      "Coral",
-      "DodgerBlue",
-      "SpringGreen",
-      "YellowGreen",
-      "Green",
-      "OrangeRed",
-      "Red",
-      "GoldenRod",
-      "HotPink",
-      "CadetBlue",
-      "SeaGreen",
-      "Chocolate",
-      "BlueViolet",
-      "Firebrick"
-    ]
-
-    let badgeSetsChannel = null
-    let badgeSetsGlobal = null
-    fetch("https://badges.twitch.tv/v1/badges/global/display")
-      .then(res => res.json())
-      .then(json => badgeSetsGlobal = json.badge_sets)
-
-    // TMI Handlers:
-    const onConnectedHandler = (host, port) => console.info(`Connected to ${host}:${port}`)
-    const onConnectErrorHandler = error => chatlog.innerHTML = `Failed to connect! Error: ${error}`
-    const onMessageHandler = (channel, context, msg, self) => {
-
-      const messageNode = msgTemplate.content.cloneNode(true)
-
-      /*
-      * USERNAME
-      */
-      const nameNode = messageNode.querySelector(".name")
-      const displayname = context["display-name"]
-      nameNode.innerHTML = displayname
-      if (context["color"] !== null) {
-        nameNode.style.color = context["color"]
-      } else {
-        nameNode.style.color = namecolors[displayname.charCodeAt(displayname.length - 1) % namecolors.length]
-      }
-
-      /*
-      * BADGES
-      */
-      const badgesNode = messageNode.querySelector(".badges")
-      const badges = context["badges"]
-      // HACK: get channel-id w/o AUTH (Thx Twitch API)
-      if (badgeSetsChannel === null)
-        fetch(`https://badges.twitch.tv/v1/badges/channels/${context['room-id']}/display`)
-          .then(res => res.json())
-          .then(json => badgeSetsChannel = json.badge_sets)
-      for (const badge in badges) {
-        try {
-          // Prepare badge stuff
-          const badgeVersion = badges[badge]
-          let urls = badgeSetsGlobal[badge].versions[badgeVersion]
-          if (!urls) urls = badgeSetsChannel[badge].versions[badgeVersion]
-          // Add badge to message
-          const badgeImg = document.createElement("img")
-          badgeImg.className = "badge"
-          badgeImg.src = urls.image_url_1x
-          badgesNode.appendChild(badgeImg)
-        } catch (error) {
-          console.error('Failed to ADD badge', badge, 'to message', msg, '! Error:', error)
-        }
-      }
-
-        /*
-        * EMOTES
-        */
-        try { 
-          let msgWithEmotes = msg.split(" ");
-          let fragment = "";
-          let messageNodeClass = messageNode.querySelector(".message")
-          const emotes = context["emotes"]
-           for(let i = 0; i < msgWithEmotes.length; i++) {
-              let emoteChecked = false;
-              for (const emote in emotes) {
-                const firstEmoteOccurance = emotes[emote][0].split("-")
-                const emoteString = msg.substring(parseInt(firstEmoteOccurance[0]), parseInt(firstEmoteOccurance[1]) + 1)
-                if(emoteString == msgWithEmotes[i]){
-                  const emoteImgSrc = `https://static-cdn.jtvnw.net/emoticons/v2/${emote}/default/dark/1.0`
-                  if(fragment !== ""){
-                    let text = document.createElement('span');
-                    text.innerText = fragment;
-                    messageNodeClass.appendChild(text);
-                    fragment = ""; //dump the text fragment because we need to append a new span
-                  }
-                  const emoteImg = `<img src="${emoteImgSrc}" alt="${emoteString}">`
-                  const emoteSpan = document.createElement('span');
-                  emoteSpan.className = "emote"
-                  emoteSpan.innerHTML = emoteImg;
-                  messageNodeClass.appendChild(emoteSpan);
-                  emoteChecked = true;
-                }
-              } 
-            if(!emoteChecked){
-              fragment += `${msgWithEmotes[i]} `
-            }
-            if(i == msgWithEmotes.length - 1) { // arrays start at 0
-              let text = document.createElement('span');
-              text.innerText = fragment;
-              messageNodeClass.appendChild(text);
-            }
-          }
-
-        } catch (error) {
-          messageNodeClass.innerText = msg
-        }
-
-
-      // Add message
-      chatlogNode.appendChild(messageNode)
-
-      // Remove message after fade out animation
-      setTimeout(() => chatlogNode.firstChild.remove(), messageRemovalTimeMs)
-    }
-
-    const client = new tmi.Client(opts)
-    // Register event handlers:
-    client.on('message', onMessageHandler)
-    client.on('connected', onConnectedHandler)
-    // Connect to Twitch:
-    client.connect().catch(onConnectErrorHandler)
-
-  </script>
+  <script src="js/js-yaml-bundle.js" defer></script>
+  <script src="js/settings.js" defer></script>
+  <script src="https://github.com/tmijs/tmi.js/releases/download/v1.8.5/tmi.min.js" defer></script>
+  <script src="js/twitchapi.js" defer></script>
+  <script src="js/tmi-emote-parse-bundle.js" defer></script>
+  <script src="js/chat.js" defer></script>
+  <script src="js/main.js" defer></script>
 </body>
 
 </html>

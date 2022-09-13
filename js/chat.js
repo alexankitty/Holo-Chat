@@ -1,20 +1,3 @@
-
-    // Define configuration options
-    const opts = {
-        pfp: true,
-        badge: true,
-        txtSize: 25,//in px
-        pfpCircle: true, //displays as square or circle
-        bgColor: "black", //css colors or hex
-        startFromBottom: true,
-        bgOpacity: 0.5,
-        messageTimeout: 0, //in milliseconds, set to 0 to disable
-        //below are for extra emote platforms
-        bttv: true,
-        ffz: true,
-        seventv: true
-      }
-
       const tmiOpts = {
         options: {
         debug: false
@@ -30,10 +13,6 @@
         *****************************************************/
         channels: ["YourChannel"]
       }
-      // Use Channel name from HASH
-      const hash = window.location.hash
-      if(hash) tmiOpts.channels[0] = hash
-
       /*
        * CSS Time to Milliseconds
        * by Jake Bellacera (http://jakebellacera.com)
@@ -59,20 +38,10 @@
         return new Promise(resolve => setTimeout(resolve, ms));
       }
 
-      var S=document.createElement('style');//customized CSS based on above options
-      S.innerHTML=`.message-emote{
-        height: ${opts.txtSize + 5}px;
-        width: ${opts.txtSize + 5}px;
-      }
-      #chatlog {
-        ${opts.startFromBottom ? "bottom:" : "top:"} 0;
-      }`;
       const chatlogNode = document.querySelector("#chatlog")
       const msgTemplate = document.querySelector("#chatmessage")
 
-      const css = getComputedStyle(document.documentElement);
-      const messageFadeOutDelay = opts.messageTimeout;
-      const messageFadeOutDuration = css_time_to_milliseconds(getComputedStyle(document.documentElement).getPropertyValue('--fade-out-duration'))
+      
 
       const namecolors = [
         "Blue",
@@ -110,12 +79,12 @@
         */
         const displayname = context["display-name"]
         const nameNode = messageNode.querySelector(".name")
-        if(opts.pfp) {
+        if(settings.options.pfp) {
           const pfpImg = document.createElement("img");
-          pfpImg.style.height = `${opts.txtSize + 5}px`;
-          pfpImg.style.width  = `${opts.txtSize + 5}px`;
+          pfpImg.style.height = `${settings.options.txtSize + 5}px`;
+          //pfpImg.style.width  = `${opts.txtSize + 5}px`;
           pfpImg.className = 'pfp';
-          if(opts.pfpCircle){
+          if(settings.options.pfpCircle){
             pfpImg.style.borderRadius = "50%";
           }
           pfpImg.src = await getPFP(displayname);
@@ -137,7 +106,7 @@
         /*
         * BADGES
         */
-       if(opts.badge){
+       if(settings.options.badge){
         const badgesNode = messageNode.querySelector(".badges")
         const badges = context["badges"]
         // HACK: get channel-id w/o AUTH (Thx Twitch API)
@@ -173,25 +142,11 @@
         chatlogNode.appendChild(messageNode)
 
         // Remove message after fade out animation
-        if(messageFadeOutDelay){
+        if(settings.options.messageTimeout){
           setTimeout(async () => {
             chatlogNode.firstElementChild.classList.add("delete")
-            await sleep(messageFadeOutDuration)
+            await sleep(settings.options.messageFadeOutDuration)
             chatlogNode.firstElementChild.remove();
-          }, messageFadeOutDelay)
+          }, settings.options.messageTimeout)
         }
       }
-      const bodyBg = document.getElementById("background");
-      document.body.style.fontSize = `${opts.txtSize}px`
-      bodyBg.style.backgroundColor = opts.bgColor;
-      bodyBg.style.opacity = opts.bgOpacity;
-      document.body.appendChild(S);
-      API.authorize();
-      tmiEmoteParse.setTwitchCredentials(API.ClientID, API.Token.value)
-      tmiEmoteParse.loadAssets(tmiOpts.channels[0], {"bttv": opts.bttv, "ffz": opts.ffz, "7tv": opts.seventv})
-      const client = new tmi.Client(tmiOpts)
-      // Register event handlers:
-      client.on('message', onMessageHandler)
-      client.on('connected', onConnectedHandler)
-      // Connect to Twitch:
-      client.connect().catch(onConnectErrorHandler)
