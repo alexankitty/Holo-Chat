@@ -37,13 +37,6 @@ Create a settings.yaml in the root directory you're hosting the files from. Use 
 
 ## Known Issues
 1. Getting channel badges anonymously is not supported by Twitch API and implemented with a hack
-## OBS Guide (deprecated instructions, see above.)
-1. Download ChatboxBot.html
-1. Change the channel name and customize anything else you want to change
- ![Change the channel name and customize anything else you want to change](https://raw.githubusercontent.com/steve1337/twitch-chatbox-bot/main/docs/change-channel-name.png)
-1. Add browser source for local file and select the customized ChatboxBot.html
- ![Add browser source for local file and select the customized ChatboxBot.html](https://raw.githubusercontent.com/steve1337/twitch-chatbox-bot/main/docs/add-browser-source.png)
-1. Done :)
 
 ## New Features
 * Additional configuration options
