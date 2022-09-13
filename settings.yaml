@@ -1,0 +1,19 @@
+---
+api:
+  ClientID: 
+  ClientSecret: 
+options:
+  pfp: true
+  badge: true
+  txtSize: 25
+  pfpCircle: true
+  bgColor: "black"
+  startFromBottom: true
+  bgOpacity: 0.5
+  messageTimeout: 0
+  #below are for extra emote platforms
+  bttv: true
+  ffz: true
+  seventv: true
+tmi:
+  channel: YourChannel
