@@ -212,7 +212,7 @@ async function main() {
     // Connect to Twitch:
     client.connect().catch(onConnectErrorHandler)
     addEventListener("keydown", function(e){
-        if (e.keyCode === 13 && is_fired == false) {
+        if (e.key === 'Enter' && is_fired == false) {
             showSettings();
             is_fired = true
         }
