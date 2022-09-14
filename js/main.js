@@ -11,6 +11,9 @@ const pfpField = document.getElementById("pfp");
 const badgeField = document.getElementById("badge")
 const pfpCircleField = document.getElementById("pfpcircle")
 const sfbField = document.getElementById("sfb");
+const msgTimeOutField = document.getElementById("msgTimeout");
+const msgLimitField = document.getElementById("msgLimit");
+const cacheTTLField = document.getElementById("cacheTTL");
 const textSizeField = document.getElementById("textsize");
 const bgColorField = document.getElementById("bgcolor");
 const bgOpacityField = document.getElementById("bgopacity");
@@ -133,6 +136,9 @@ function populateSettings(){
     badgeField.checked = settings.options.badge;
     pfpCircleField.checked = settings.options.pfpCircle;
     sfbField.checked = settings.options.startFromBottom;
+    msgTimeOutField.value = settings.options.messageTimeout;
+    msgLimitField.value = settings.options.messageLimit;
+    cacheTTLField.value = settings.options.cacheTTL;
     textSizeField.value = settings.options.txtSize;
     bgColorField.value = settings.options.bgColor;
     bgOpacityField.value = settings.options.bgOpacity;
@@ -158,6 +164,9 @@ function saveSettings() {
     settings.options.badge = badgeField.checked;
     settings.options.pfpCircle = pfpCircleField.checked;
     settings.options.startFromBottom = sfbField.checked;
+    settings.options.messageTimeout = msgTimeOutField.value;
+    settings.options.messageLimit = msgLimitField.value;
+    settings.options.cacheTTL = cacheTTLField.value;
     settings.options.txtSize = textSizeField.value;
     settings.options.bgColor =  bgColorField.value;
     settings.options.bgOpacity = bgOpacityField.value;
@@ -173,12 +182,16 @@ function saveSettings() {
     location.reload();//might be unnecessary in the future
 }
 
-function hideSettings(){
+async function hideSettings(){
     is_fired = false;
     settingsForm.classList.add("settingsHide");
+    await sleep(500);
+    settingsForm.style.display = "none";
 }
 
-function showSettings() {
+async function showSettings() {
+    settingsForm.style.display = "initial" 
+    await sleep(100);
     settingsForm.classList.remove("settingsHide");
 }
 

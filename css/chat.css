@@ -129,13 +129,13 @@ html, body {
   bottom: 0;
   margin: auto;
   position: absolute;
-  width: 400px;
+  width: fit-content;
   position: absolute;
   overflow: hidden;
   height: 50%;
-  border: 3px solid #333;
+  border: 3px solid #333333aa;
   border-radius: 25px;
-  background-color: #000;
+  background-color: #000000aa;
   z-index: 1;
   transition: opacity 0.5s;
 }
@@ -145,6 +145,9 @@ html, body {
   height: 100%;
   margin: auto;
   padding: 10px;
+  font-size: 15px;
+  text-align: end;
+  user-select: none;
 }
 
 .settingsHide {
@@ -164,4 +167,70 @@ html, body {
 ::-webkit-scrollbar-thumb {
   border-radius: 10px;
   -webkit-box-shadow: inset 0 0 6px     rgba(0,0,0,0.5); 
+}
+
+form span {
+  white-space: nowrap;
+}
+
+form p {
+  text-align: center;
+  margin: 0;
+}
+
+form > div {
+  max-width: fit-content;
+  min-width: -webkit-fill-available;
+}
+
+.textInput {
+  width: 100px;
+}
+
+
+/* Tooltip container */
+.tooltip {
+  position: relative;
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+  visibility: hidden;
+  background-color: #555555cc;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  width: fit-content;
+  /* Position the tooltip text */
+  position: absolute;
+  z-index: 1;
+  top: 125%;
+  left: 0%;
+  /* Fade in tooltip */
+  opacity: 0;
+  transition: opacity 0.3s;
+  white-space: normal;
+}
+
+/* Tooltip arrow */
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent #555555cc transparent;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+.centerText {
+  text-align: center;
 }
