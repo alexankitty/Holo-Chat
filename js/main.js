@@ -1,5 +1,7 @@
 let styleOverride;
 let is_fired = false;
+let holdStart = null;
+let holdTime = null;
 const settingStore = new APIStorageObject("settings");
 const override = new APIStorageObject("override");
 const settingsForm = document.getElementById("settings");
@@ -217,6 +219,23 @@ async function main() {
             is_fired = true
         }
     });
+    addEventListener('mousedown', function(evt) {
+            if(!is_fired){
+                holdStart = Date.now()
+            }
+          });
+      
+    addEventListener('mouseup', function(evt) {
+            holdTime = Date.now() - holdStart;
+            // now in holdTime you have time in milliseconds
+            if(holdTime >= 500 && is_fired == false){
+                showSettings();
+                is_fired = true;
+                holdTime = 0;
+                holdStart = 0;
+            }
+          });
+
     cacheWatchDog();
 }
 
