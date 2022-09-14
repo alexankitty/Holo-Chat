@@ -19,57 +19,106 @@
 
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
-  <div id="settings" class="settingsWrap settingsHide">
+  <div id="settings" class="settingsWrap settingsHide" style="display: none">
   <div class="settings">
     <form>
       <hr>
-      <label>API Settings</label>
-      <hr>
-      <label for="ClientID">Client ID: </label>
-      <input type="text" id="ClientID" name="ClientID"><br>
+      <div class="tooltip">
+        <p>API Settings</p>
+        <span class="tooltiptext">Client ID and Secret enable usage of the API for PFP and additional emotes.
+          Channel name tells tmi.js which channel to view chat for.
+          Override YAML disables settings.yaml if it's present in favor of local settings.</span>
+      </div>
+      <hr><label for="ClientID">Client ID: </label>
+      <input type="text" id="ClientID" name="ClientID" class="textInput">
+      <br>
       <label for="ClientSecret">Client Secret: </label>
-      <input type="text" id="ClientSecret" name="ClientSecret"><br>
-      <label for="channel">Channel Name: </label>
-      <input type="text" id="channel" name="channel"><br>
+      <input type="password" id="ClientSecret" name="ClientSecret" class="textInput">
+      <br><label for="channel">Channel Name: </label>
+      <input type="text" id="channel" name="channel" class="textInput">
+      <br>
       <label for="override">Override YAML: </label>
       <input type="checkbox" id="override" name="override"><br>
       <hr>
-      <label>Options</label>
+      <div class="tooltip">
+        <p>Options</p>
+        <span class="tooltiptext">Controls chat behaviors. If API isn't filled out, profile picture and emote platforms are ignored.</span>
+      </div>
       <hr>
-      <label for="pfp">Profile Picture: </label>
-      <input type="checkbox" id="pfp" name="pfp"><br>
-      <label for="badge">Badges: </label>
-      <input type="checkbox" id="badge" name="badge"><br>
-      <label for="pfpcircle">Circle PFPs: </label>
-      <input type="checkbox" id="pfpcircle" name="pfpcircle"><br>
-      <label for="sfb">Start From Bottom: </label>
-      <input type="checkbox" id="sfb" name="sfb"><br>
+      <div>
+      <span>
+        <label for="pfp">Profile Picture: </label>
+        <input type="checkbox" id="pfp" name="pfp">
+      </span>
+      <span>
+        <label for="badge">Badges: </label>
+        <input type="checkbox" id="badge" name="badge">
+      </span>
+      <span>
+        <label for="pfpcircle">Circle PFPs: </label>
+        <input type="checkbox" id="pfpcircle" name="pfpcircle">
+      </span>
+      <span>
+        <label for="sfb">Start From Bottom: </label>
+        <input type="checkbox" id="sfb" name="sfb">
+      </span>
+     </div>
       <hr>
-      <label>Appearance</label>
+      <div class="tooltip">
+        <p>Message Handling</p>
+        <span class="tooltiptext">Controls behaviors regarding message removal and caching. Set to 0 to disable features.</span>
+      </div>
+      <hr>
+      <label for="msgTimeout">Message Timeout: </label>
+      <input type="text" id="msgTimeout" name="msgTimeout" class="textInput"><br>
+      <label for="msgLimit">Message Limit: </label>
+      <input type="text" id="msgLimit" name="msgLimit" class="textInput"><br>
+      <label for="cacheTTL" >Cache Expiration: </label>
+      <input type="text" id="cacheTTL" name="cacheTTL" style="width: 93px;" class="textInput"><label>s</label><br>
+      
+      <hr>
+      <div class="tooltip">
+      <p>Appearance</p>
+      <span class="tooltiptext">Controls apperances by modifying CSS. You can set it to a font installed on your computer, or a google font.</span>
+    </div>
       <hr>
       <label for="textsize">Text Size: </label>
-      <input type="text" id="textsize" name="textsize"><label>px</label><br>
+      <input type="text" id="textsize" name="textsize" style="width: 85px;" class="textInput"><label>px</label><br>
       <label for="bgcolor">Background Color: </label>
-      <input type="text" id="bgcolor" name="bgcolor"><br>
+      <input type="text" id="bgcolor" name="bgcolor" class="textInput"><br>
       <label for="bgopacity">Background Opacity: </label>
-      <input type="text" id="bgopacity" name="bgopacity"><br>
+      <input type="text" id="bgopacity" name="bgopacity" class="textInput"><br>
       <label for="fontname">Font Name: </label>
-      <input type="text" id="fontname" name="fontname"><br>
-      <label for="fontweight">Font Weight: </label>
-      <input type="text" id="fontweight" name="fontweight"><br>
+      <input type="text" id="fontname" name="fontname" class="textInput"><br>
+      <label for="fontweight">Font Style #: </label>
+      <input type="text" id="fontweight" name="fontweight" class="textInput"><br>
       <label for="googlefont">Google Fonts: </label>
       <input type="checkbox" id="googlefont" name="googlefont"><br>
       <hr>
-      <label>Emotes</label>
+      <div class="tooltip">
+      <p>Emote Platforms</p>
+      <span class="tooltiptext">Enables emote platforms in addition to the twitch vanilla emotes. This is disabled if API settings aren't filled out.</span>
+    </div>
       <hr>
-      <label for="bttv">BTTV: </label>
-      <input type="checkbox" id="bttv" name="bttv"><br>
-      <label for="ffz">FFZ: </label>
-      <input type="checkbox" id="ffz" name="ffz"><br>
-      <label for="7tv">7TV: </label>
-      <input type="checkbox" id="7tv" name="7tv"><br>
+      <div>
+      <span>
+        <label for="bttv">BTTV: </label>
+        <input type="checkbox" id="bttv" name="bttv">
+      </span>
+      <span>
+        <label for="ffz">FFZ: </label>
+        <input type="checkbox" id="ffz" name="ffz">
+      </span>
+      <span>
+        <label for="7tv">7TV: </label>
+        <input type="checkbox" id="7tv" name="7tv">
+      </span>
+     </div>
       <hr>
-      <label>Import/Export</label>
+      <div class="tooltip">
+      <p>Import/Export</p>
+      <span class="tooltiptext">Import or export a YAML settings file.</span>
+    </div>
       <hr>
       <input type="file" id="file" accept=".yaml,.yml"><button type="button" onclick="importYML()" formmethod="post">Import</button><br>
       <button type="button" onclick="exportYML()" formmethod="post">Export</button>
