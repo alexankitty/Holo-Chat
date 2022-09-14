@@ -19,7 +19,7 @@ Simple HTML page that can be used to display Twitch chat with customizable optio
 ## Modifications
 1. Interact with the source.
 2. Click the window.
-3. Press Enter and the settings GUI will pull up. Pressing Save or Cancel will close it.
+3. Press Enter (or hold click for longer than 500ms) and the settings GUI will pull up. Pressing Save or Cancel will close it.
 
 ## Advanced Configuration
 ![YAML Config](https://github.com/alexankitty/twitch-chatbox-bot/blob/main/docs/configfile.png?raw=true)
