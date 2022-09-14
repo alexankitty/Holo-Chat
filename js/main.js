@@ -53,16 +53,16 @@ function importYML(){
 }
 
 function exportYML() {
-    var settingExport = jsYaml.dump(settings);
-    var blob = new Blob([settingExport], {type: 'text/plain'});
+    const settingExport = jsYaml.dump(settings);
+    const blob = new Blob([settingExport], {type: 'text/plain'});
     // pass a useful mime type here
-    var url = URL.createObjectURL(blob);
+    const url = URL.createObjectURL(blob);
     fetch(url)
     .then((res) => { return res.blob(); })
     .then((data) => {
-    var a = document.createElement("a");
+    let a = document.createElement("a");
     a.href = window.URL.createObjectURL(data);
-    a.download = "settings.yml";
+    a.download = "settings.yaml";
     a.click();
     a.remove();
 });
