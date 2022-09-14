@@ -217,6 +217,7 @@ async function main() {
             is_fired = true
         }
     });
+    cacheWatchDog();
 }
 
 
