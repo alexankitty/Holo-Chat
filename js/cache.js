@@ -1,6 +1,3 @@
-let cached;
-let cacheExpiry;
-
 async function saveCache() {
     if(!settings.options.cacheTTL) return;
     const chatlogNode = document.querySelector("#chatlog")

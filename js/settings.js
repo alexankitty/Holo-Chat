@@ -31,6 +31,7 @@ const defaultSettings = {
 
 async function fetchSettings(path) {
     if(override.value == "false" || override.value == null){
+        try{
         let response = await fetch(path);
         if(response.ok) {
             let text = await response.text();
@@ -41,6 +42,11 @@ async function fetchSettings(path) {
         else{
             override.value = "true"; //we're going to assume that subsequent loads shouldn't attempt to use the YAML.
         }
+      }
+      catch(e){
+        //continue in localstorage mode as we can't use a setting.yaml under file:/// protocol
+        override.value = true;
+      }
     }
     //grab local storage instead. Load defaults if not set
     if(settingStore.value == null || settingStore.value == 'undefined' || settingStore.value == '[object Object]'){//maybe this can be cleaned later.

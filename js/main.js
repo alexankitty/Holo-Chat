@@ -4,6 +4,8 @@ let holdStart = null;
 let holdTime = null;
 const settingStore = new APIStorageObject("settings");
 const override = new APIStorageObject("override");
+const cached = new APIStorageObject("msgCache");
+const cacheExpiry = new APIStorageObject("cacheExpiry");
 const settingsForm = document.getElementById("settings");
 const ClientIDField = document.getElementById("ClientID");
 const ClientSecretField = document.getElementById("ClientSecret");
@@ -53,22 +55,23 @@ function importYML(){
 }
 
 function exportYML() {
-    var settingExport = jsYaml.dump(settings);
-    var blob = new Blob([settingExport], {type: 'text/plain'});
+    const settingExport = jsYaml.dump(settings);
+    const blob = new Blob([settingExport], {type: 'text/plain'});
     // pass a useful mime type here
-    var url = URL.createObjectURL(blob);
+    const url = URL.createObjectURL(blob);
     fetch(url)
     .then((res) => { return res.blob(); })
     .then((data) => {
-    var a = document.createElement("a");
+    let a = document.createElement("a");
     a.href = window.URL.createObjectURL(data);
-    a.download = "settings.yml";
+    a.download = "settings.yaml";
     a.click();
     a.remove();
 });
 }
 
 function loadSettings() {
+    restoreDataTypes();
     if(settings.api.ClientID !== null){
         API.ClientID = settings.api.ClientID;
         API.ClientSecret = settings.api.ClientSecret;
@@ -114,14 +117,41 @@ function loadSettings() {
     bodyBg.style.backgroundColor = settings.options.bgColor;
     bodyBg.style.opacity = settings.options.bgOpacity;
     if(settings.options.cacheTTL){
-        cached = new APIStorageObject("msgCache");
-        cacheExpiry = new APIStorageObject("cacheExpiry");
         if(cached.value){
             readCache();
         }
     }
+    cacheExpiry.valueAsDate = settings.options.cacheTTL;//Update the cache time at read time. Mitigation to allow for cache deletion
+    
 
+}
 
+function restoreDataTypes() {
+    //local storage stringifies everything
+    //restore bools
+    settings.options.pfp = parseBool(settings.options.pfp);
+    settings.options.badge = parseBool(settings.options.badge);
+    settings.options.pfpCircle = parseBool(settings.options.pfpCircle);
+    settings.options.startFromBottom = parseBool(settings.options.startFromBottom);
+    settings.options.googleFont = parseBool(settings.options.googleFont);
+    settings.options.bttv = parseBool(settings.options.bttv);
+    settings.options.ffz = parseBool(settings.options.ffz);
+    settings.options.seventv = parseBool(settings.options.seventv);
+    settings.options.firstRun = parseBool(settings.options.firstRun);
+    //restore Ints
+    settings.options.txtSize = parseInt(settings.options.txtSize);
+    settings.options.messageTimeout = parseInt(settings.options.messageTimeout);
+    settings.options.messageLimit = parseInt(settings.options.messageLimit);
+    settings.options.cacheTTL = parseInt(settings.options.cacheTTL);
+    settings.options.fontWeight = parseInt(settings.options.fontWeight);
+}
+
+function parseBool(string) {
+    if(typeof(string) === "boolean") return string;
+    if(string === "true"){
+        return true;
+    }
+    return false;
 }
 
 function populateSettings(){

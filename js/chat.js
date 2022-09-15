@@ -182,7 +182,7 @@
         chatlogNode.appendChild(messageNode)
 
         // Remove message after fade out animation
-        if(settings.options.messageTimeout){
+        if(parseInt(settings.options.messageTimeout)){
           setTimeout(async () => {
             chatlogNode.firstElementChild.classList.add("delete")
             await sleep(settings.options.messageFadeOutDuration)
@@ -190,7 +190,7 @@
           }, settings.options.messageTimeout)
         }
         // Remove message if exceeded
-        if(settings.options.messageLimit !== 0){
+        if(parseInt(settings.options.messageLimit) !== 0){
           if(chatlogNode.childElementCount > settings.options.messageLimit){
             chatlogNode.firstElementChild.classList.add("delete")
             await sleep(settings.options.messageFadeOutDuration)
