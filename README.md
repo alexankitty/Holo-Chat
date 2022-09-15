@@ -63,5 +63,5 @@ Create a settings.yaml in the root directory you're hosting the files from. Use 
 * Caching to restore chat when changing browser sources/persistence.
 * Animations
 * Settings GUI
-
+* Standalone mode support. Download the release or clone the repo and point OBS to the html file if you prefer.
 
