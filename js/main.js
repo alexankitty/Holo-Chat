@@ -69,6 +69,7 @@ function exportYML() {
 }
 
 function loadSettings() {
+    restoreDataTypes();
     if(settings.api.ClientID !== null){
         API.ClientID = settings.api.ClientID;
         API.ClientSecret = settings.api.ClientSecret;
@@ -122,6 +123,34 @@ function loadSettings() {
     }
 
 
+}
+
+function restoreDataTypes() {
+    //local storage stringifies everything
+    //restore bools
+    settings.options.pfp = parseBool(settings.options.pfp);
+    settings.options.badge = parseBool(settings.options.badge);
+    settings.options.pfpCircle = parseBool(settings.options.pfpCircle);
+    settings.options.startFromBottom = parseBool(settings.options.startFromBottom);
+    settings.options.googleFont = parseBool(settings.options.googleFont);
+    settings.options.bttv = parseBool(settings.options.bttv);
+    settings.options.ffz = parseBool(settings.options.ffz);
+    settings.options.seventv = parseBool(settings.options.seventv);
+    settings.options.firstRun = parseBool(settings.options.firstRun);
+    //restore Ints
+    settings.options.txtSize = parseInt(settings.options.txtSize);
+    settings.options.messageTimeout = parseInt(settings.options.messageTimeout);
+    settings.options.messageLimit = parseInt(settings.options.messageLimit);
+    settings.options.cacheTTL = parseInt(settings.options.cacheTTL);
+    settings.options.fontWeight = parseInt(settings.options.fontWeight);
+}
+
+function parseBool(string) {
+    if(typeof(string) === "boolean") return string;
+    if(string === "true"){
+        return true;
+    }
+    return false;
 }
 
 function populateSettings(){
