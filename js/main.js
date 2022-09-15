@@ -4,6 +4,8 @@ let holdStart = null;
 let holdTime = null;
 const settingStore = new APIStorageObject("settings");
 const override = new APIStorageObject("override");
+const cached = new APIStorageObject("msgCache");
+const cacheExpiry = new APIStorageObject("cacheExpiry");
 const settingsForm = document.getElementById("settings");
 const ClientIDField = document.getElementById("ClientID");
 const ClientSecretField = document.getElementById("ClientSecret");
@@ -115,13 +117,12 @@ function loadSettings() {
     bodyBg.style.backgroundColor = settings.options.bgColor;
     bodyBg.style.opacity = settings.options.bgOpacity;
     if(settings.options.cacheTTL){
-        cached = new APIStorageObject("msgCache");
-        cacheExpiry = new APIStorageObject("cacheExpiry");
         if(cached.value){
             readCache();
         }
     }
-
+    cacheExpiry.valueAsDate = settings.options.cacheTTL;//Update the cache time at read time. Mitigation to allow for cache deletion
+    
 
 }
 
