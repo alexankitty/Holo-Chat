@@ -107,7 +107,14 @@ function loadSettings() {
     }
     #chatlog {
       ${settings.options.startFromBottom ? "bottom:" : "top:"} 0;
-    }`;
+    }
+    .pfp{
+        height: ${parseInt(settings.options.txtSize) + 5}px;
+    }
+    .badge{
+        height: ${parseInt(settings.options.txtSize) + 5}px;
+    }
+    `;
     
     const css = getComputedStyle(document.documentElement);
     settings.options.messageFadeOutDelay = settings.options.messageTimeout;
