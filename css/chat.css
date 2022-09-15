@@ -113,6 +113,10 @@ html, body {
   vertical-align: baseline;
 }
 
+#chatlog .badges {
+  vertical-align: text-top;
+}
+
 .pfp {
   vertical-align: text-top;
   margin-right: 5px;
