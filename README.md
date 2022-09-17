@@ -65,3 +65,11 @@ Create a settings.yaml in the root directory you're hosting the files from. Use 
 * Settings GUI
 * Standalone mode support. Download the release or clone the repo and point OBS to the html file if you prefer.
 
+## To Do
+* Restructure Settings scripts.
+* Twitch API badge support
+* YouTube chat?
+* Blacklisting (and bot blacklist option)
+* Implement additional customizations.
+* Remove inline styles.
+* Code cleanup.
