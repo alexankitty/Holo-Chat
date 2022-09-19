@@ -61,7 +61,7 @@ html, body {
 }
 
 #chatlog>div {
-  display: table-row;
+  padding-left: 4px;
 }
 
 #chatlog>div {
@@ -100,10 +100,12 @@ html, body {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+  vertical-align: sub;
 }
 
 #chatlog .message {
   word-wrap: break-word;
+  vertical-align: middle;
 }
 
 #chatlog .badge {
@@ -241,4 +243,10 @@ form > div {
 
 .action {
   font-style: italic;
+}
+
+.priority {
+  border-left: 4px rgba(255,255,255,0.5) solid;
+  margin-left: -4px;
+  border-radius: 5px;
 }

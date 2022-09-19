@@ -68,6 +68,20 @@ class API {
 			})
 			.then(result => {return result});
 	}
+
+	static async queryUserChatColor(channel){
+		const channel_id = await API.queryChannel(channel);
+		const tempHeader = new Headers({
+			'Authorization': `Bearer ${API.Token.value}`,
+			'Client-Id': API.ClientID //Switch this to the token generated in authorize()
+			})
+			return API.fetch({
+				url: `https://api.twitch.tv/helix/chat/color?user_id=${channel_id['id']}`,
+				method: "GET",
+				headerobj: tempHeader
+			})
+			.then(result => {return result});
+	}
 	
 	static authorize() {
 		var url = "https://id.twitch.tv/oauth2/token"
