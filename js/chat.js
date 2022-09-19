@@ -107,23 +107,34 @@
         const badgesNode = messageNode.querySelector(".badges")
         const badges = context["badges"]
         // HACK: get channel-id w/o AUTH (Thx Twitch API)
-        if (badgeSetsChannel === null)
-          fetch(`https://badges.twitch.tv/v1/badges/channels/${context['room-id']}/display`)
-            .then(res => res.json())
-            .then(json => badgeSetsChannel = json.badge_sets)
-        for (const badge in badges) {
-          try {
-            // Prepare badge stuff
-            const badgeVersion = badges[badge]
-            let urls = badgeSetsGlobal[badge].versions[badgeVersion]
-            if (!urls) urls = badgeSetsChannel[badge].versions[badgeVersion]
-            // Add badge to message
+        if(settings.options.apiDisable){
+          if (badgeSetsChannel === null)
+            fetch(`https://badges.twitch.tv/v1/badges/channels/${context['room-id']}/display`)
+              .then(res => res.json())
+              .then(json => badgeSetsChannel = json.badge_sets)
+          for (const badge in badges) {
+            try {
+              // Prepare badge stuff
+              const badgeVersion = badges[badge]
+              let urls = badgeSetsGlobal[badge].versions[badgeVersion]
+              if (!urls) urls = badgeSetsChannel[badge].versions[badgeVersion]
+              // Add badge to message
+              const badgeImg = document.createElement("img")
+              badgeImg.className = "badge"
+              badgeImg.src = urls.image_url_4x
+              badgesNode.appendChild(badgeImg)
+            } catch (error) {
+              console.error('Failed to ADD badge', badge, 'to message', msg, '! Error:', error)
+            }
+          }
+        }
+        if(!settings.options.apiDisable){
+          const badgeArr = tmiEmoteParse.getBadges(context, channel);
+          for(i = 0; i < badgeArr.length; i++){
             const badgeImg = document.createElement("img")
-            badgeImg.className = "badge"
-            badgeImg.src = urls.image_url_1x
+            badgeImg.className = "badge";
+            badgeImg.src = badgeArr[i]['img'];
             badgesNode.appendChild(badgeImg)
-          } catch (error) {
-            console.error('Failed to ADD badge', badge, 'to message', msg, '! Error:', error)
           }
         }
       }
