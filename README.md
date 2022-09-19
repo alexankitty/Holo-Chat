@@ -65,6 +65,7 @@ Create a settings.yaml in the root directory you're hosting the files from. Use 
 * Settings GUI
 * Standalone mode support. Download the release or clone the repo and point OBS to the html file if you prefer.
 * Automatically remove messages when deleted, or a user is banned or timed out.
+* /clear will wipe out chat
 
 ## To Do
 * Restructure Settings scripts.
