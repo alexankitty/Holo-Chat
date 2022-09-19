@@ -74,4 +74,3 @@ Create a settings.yaml in the root directory you're hosting the files from. Use 
 * Blacklisting (and bot blacklist option)
 * Implement additional customizations.
 * Code cleanup.
-* Emit event on twitch authorization to update emote-parse
