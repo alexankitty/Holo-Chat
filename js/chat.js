@@ -194,6 +194,7 @@
         * EMOTES
         */
         let messageNodeClass = messageNode.querySelector(".message")
+        if(context['message-type'] === 'action') messageNodeClass.classList.add('action');
         if(settings.options.apiDisable) {//legacy handling which disables pfp and extra emotes
           try { 
             let msgWithEmotes = msg.split(" ");

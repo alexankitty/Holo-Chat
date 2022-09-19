@@ -238,3 +238,7 @@ form > div {
 .centerText {
   text-align: center;
 }
+
+.action {
+  font-style: italic;
+}
