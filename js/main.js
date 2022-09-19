@@ -116,7 +116,7 @@ function loadSettings() {
         font-family: '${settings.options.fontName}';
     }
     .message-emote{
-      height: ${parseInt(settings.options.txtSize) + 5}px;
+      height: ${parseInt(settings.options.txtSize) + 12}px;
     }
     #chatlog {
       ${settings.options.startFromBottom ? "bottom:" : "top:"} 0;
@@ -248,7 +248,7 @@ async function showSettings() {
 }
 
 async function setHighlightColor() {
-    let apiReturn = await API.queryUserChatColor('alexankitty');
+    let apiReturn = await API.queryUserChatColor(tmiOpts.channels[0].slice(1));
     let color = apiReturn['color'];
     if(color[0] !== "#"){
         color = colorNameToHex(color);
@@ -278,7 +278,6 @@ async function main() {
     client.on('clearchat', onClear)
     setHighlightColor();
     document.body.appendChild(styleOverride);
-    //client.on('raw_message', PriorityMessage)
     // Connect to Twitch:
     client.connect().catch(onConnectErrorHandler)
     addEventListener("keydown", function(e){
@@ -287,7 +286,6 @@ async function main() {
             is_fired = true
         }
     });
-
     cacheWatchDog();
 }
 

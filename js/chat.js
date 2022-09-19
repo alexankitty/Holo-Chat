@@ -118,16 +118,6 @@
       }
         saveCache();
       }
-      const PriorityMessage = async(messageCloned, message) => {
-        console.log(messageCloned, message);
-        if(message['command'] === "PRIVMSG"){
-          let channel = message['params'][0];
-          let context = message['tags'];
-          let messageText = message['params'][1];
-          let self = "#" + message['tags']['username'] ? channel : false;
-          onMessageHandler(channel, context, messageText, self, priorityMessage = true)
-        }
-      }
       const onMessageHandler = async(channel, context, msg, self) => {
         console.log(channel, context, msg, self)
         const messageNode = msgTemplate.content.cloneNode(true)
