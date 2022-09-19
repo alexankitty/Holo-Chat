@@ -68,6 +68,20 @@ class API {
 			})
 			.then(result => {return result});
 	}
+
+	static async queryUserChatColor(channel){
+		const channel_id = await API.queryChannel(channel);
+		const tempHeader = new Headers({
+			'Authorization': `Bearer ${API.Token.value}`,
+			'Client-Id': API.ClientID //Switch this to the token generated in authorize()
+			})
+			return API.fetch({
+				url: `https://api.twitch.tv/helix/chat/color?user_id=${channel_id['id']}`,
+				method: "GET",
+				headerobj: tempHeader
+			})
+			.then(result => {return result});
+	}
 	
 	static authorize() {
 		var url = "https://id.twitch.tv/oauth2/token"
@@ -85,12 +99,14 @@ class API {
 					urlencode: true,
 					authorizing: true
 				})
+				
 	}
 
 	static storeToken(obj) {
 		API.Token.value = obj.access_token;
 		API.Expiry.value = obj.expires_in;
 		API.TokenType.Value = obj.token_type;
+		TwitchAPIEvents.emit('authorize');
 	}
 
 	static async fetch({url, responseHandler, paramobj = {}, headerobj = {}, method = "GET", mode = 'cors', cache = 'default', credentials = 'same-origin', redirect = 'follow', referrerpolicy = 'no-referrer-when-downgrade', urlencode = false, authorizing = false}) {//And so it begins
@@ -174,3 +190,37 @@ class API {
 		throw error;
 	};
 }
+
+class APIEmitter {
+	constructor() {
+		this._events = {
+			authorize: []
+		}
+	  }
+
+	  on(name, listener) {
+        if(!this._events[name]) this._events[name] = [];
+        this._events[name].push(listener);
+    }
+
+    off(name, listenerToRemove) {
+        if (!this._events[name]) 
+        throw new Error(`Can't remove a listener. Event "${name}" doesn't exits.`);
+      
+        const filterListeners = (listener) => listener !== listenerToRemove;
+      
+        this._events[name] = this._events[name].filter(filterListeners);
+    }
+
+    emit(name, data) {
+        if (!this._events[name])
+        throw new Error(`Can't emit an event. Event "${name}" doesn't exits.`);
+
+        const fireCallbacks = (callback) => {
+          callback(data);
+        };
+        this._events[name].forEach(fireCallbacks);
+    }
+}
+
+const TwitchAPIEvents = new APIEmitter;

@@ -69,9 +69,62 @@
       const getPFP = (channel) => API.queryChannel(channel).then(data => {return data.profile_image_url})
       const onConnectedHandler = (host, port) => console.info(`Connected to ${host}:${port}`)
       const onConnectErrorHandler = error => chatlog.innerHTML = `Failed to connect! Error: ${error}`
+      const onTimeout = async(channel, username, reason, duration, userstate) => {
+        try{
+        let msgList = chatlogNode.querySelectorAll(`div[userid='${userstate['target-user-id']}'`);
+        for(let i = 0; i < msgList.length; i++){
+          msgList[i].remove();
+        }
+      }
+      catch{
+        //do nothing other than notify
+        console.log(`Failed to delete all messages for ${userstate['target-user-id']}`)
+      }
+      saveCache();
+      }
+      const onBan = async(channel, username, reason, userstate) => {
+        try{
+        let msgList = chatlogNode.querySelectorAll(`div[userid='${userstate['target-user-id']}'`);
+        for(let i = 0; i < msgList.length; i++){
+          msgList[i].remove();
+        }
+      }
+      catch{
+        //do nothing other than notify
+        console.log(`Failed to delete all messages for ${userstate['target-user-id']}`)
+      }
+      
+      }
+      const onMessageDeleteHandler = async(channel, username, deletedMessage, context) => {
+        try{
+          document.getElementById(context['target-msg-id']).remove();
+        }
+        catch{
+          console.log(`Failed to remove message id ${context['target-msg-id']}`);
+          //do nothing
+        }
+        saveCache();
+      }
+      const onClear = async(channel) => {
+        try{
+        let allMessages = chatlogNode.getElementsByTagName('div');
+        let length = allMessages.length; 
+        for(let i = 0; i <= length; i++){
+          allMessages[0].remove();
+        }
+      }
+      catch{
+        console.log("No messages to clear");
+      }
+        saveCache();
+      }
       const onMessageHandler = async(channel, context, msg, self) => {
-
+        console.log(channel, context, msg, self)
         const messageNode = msgTemplate.content.cloneNode(true)
+        //set the message ID
+        messageNode.firstElementChild.setAttribute("id", `${context['id']}`);
+        messageNode.firstElementChild.setAttribute("userid", context['user-id']);
+        if(context['msg-id'] === "highlighted-message") messageNode.firstElementChild.classList.add("priority")
         /*
         * PFP (Requires API access in TwitchAPI.js)
         */
@@ -107,23 +160,34 @@
         const badgesNode = messageNode.querySelector(".badges")
         const badges = context["badges"]
         // HACK: get channel-id w/o AUTH (Thx Twitch API)
-        if (badgeSetsChannel === null)
-          fetch(`https://badges.twitch.tv/v1/badges/channels/${context['room-id']}/display`)
-            .then(res => res.json())
-            .then(json => badgeSetsChannel = json.badge_sets)
-        for (const badge in badges) {
-          try {
-            // Prepare badge stuff
-            const badgeVersion = badges[badge]
-            let urls = badgeSetsGlobal[badge].versions[badgeVersion]
-            if (!urls) urls = badgeSetsChannel[badge].versions[badgeVersion]
-            // Add badge to message
+        if(settings.options.apiDisable){//Legacy handling for obtaining badges. The first request will always fail for some reason.
+          if (badgeSetsChannel === null)
+            fetch(`https://badges.twitch.tv/v1/badges/channels/${context['room-id']}/display`)
+              .then(res => res.json())
+              .then(json => badgeSetsChannel = json.badge_sets)
+          for (const badge in badges) {
+            try {
+              // Prepare badge stuff
+              const badgeVersion = badges[badge]
+              let urls = badgeSetsGlobal[badge].versions[badgeVersion]
+              if (!urls) urls = badgeSetsChannel[badge].versions[badgeVersion]
+              // Add badge to message
+              const badgeImg = document.createElement("img")
+              badgeImg.className = "badge"
+              badgeImg.src = urls.image_url_4x
+              badgesNode.appendChild(badgeImg)
+            } catch (error) {
+              console.error('Failed to ADD badge', badge, 'to message', msg, '! Error:', error)
+            }
+          }
+        }
+        if(!settings.options.apiDisable){
+          const badgeArr = tmiEmoteParse.getBadges(context, channel);
+          for(i = 0; i < badgeArr.length; i++){
             const badgeImg = document.createElement("img")
-            badgeImg.className = "badge"
-            badgeImg.src = urls.image_url_1x
+            badgeImg.className = "badge";
+            badgeImg.src = badgeArr[i]['img'];
             badgesNode.appendChild(badgeImg)
-          } catch (error) {
-            console.error('Failed to ADD badge', badge, 'to message', msg, '! Error:', error)
           }
         }
       }
@@ -132,6 +196,7 @@
         * EMOTES
         */
         let messageNodeClass = messageNode.querySelector(".message")
+        if(context['message-type'] === 'action') messageNodeClass.classList.add('action');
         if(settings.options.apiDisable) {//legacy handling which disables pfp and extra emotes
           try { 
             let msgWithEmotes = msg.split(" ");
