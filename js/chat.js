@@ -69,9 +69,44 @@
       const getPFP = (channel) => API.queryChannel(channel).then(data => {return data.profile_image_url})
       const onConnectedHandler = (host, port) => console.info(`Connected to ${host}:${port}`)
       const onConnectErrorHandler = error => chatlog.innerHTML = `Failed to connect! Error: ${error}`
+      const onTimeout = async(channel, username, reason, duration, userstate) => {
+        try{
+        let msgList = chatlogNode.querySelectorAll(`div[userid='${userstate['target-user-id']}'`);
+        for(let i = 0; i < msgList.length; i++){
+          msgList[i].remove();
+        }
+      }
+      catch{
+        //do nothing other than notify
+        console.log(`Failed to delete all messages for ${userstate['target-user-id']}`)
+      }
+      }
+      const onBan = async(channel, username, reason, userstate) => {
+        try{
+        let msgList = chatlogNode.querySelectorAll(`div[userid='${userstate['target-user-id']}'`);
+        for(let i = 0; i < msgList.length; i++){
+          msgList[i].remove();
+        }
+      }
+      catch{
+        //do nothing other than notify
+        console.log(`Failed to delete all messages for ${userstate['target-user-id']}`)
+      }
+      }
+      const onMessageDeleteHandler = async(channel, username, deletedMessage, context) => {
+        try{
+          document.getElementById(context['target-msg-id']).remove();
+        }
+        catch{
+          console.log(`Failed to remove message id ${context['target-msg-id']}`);
+          //do nothing
+        }
+      }
       const onMessageHandler = async(channel, context, msg, self) => {
-
         const messageNode = msgTemplate.content.cloneNode(true)
+        //set the message ID
+        messageNode.firstElementChild.setAttribute("id", `${context['id']}`);
+        messageNode.firstElementChild.setAttribute("userid", context['user-id']);
         /*
         * PFP (Requires API access in TwitchAPI.js)
         */
@@ -107,7 +142,7 @@
         const badgesNode = messageNode.querySelector(".badges")
         const badges = context["badges"]
         // HACK: get channel-id w/o AUTH (Thx Twitch API)
-        if(settings.options.apiDisable){
+        if(settings.options.apiDisable){//Legacy handling for obtaining badges. The first request will always fail for some reason.
           if (badgeSetsChannel === null)
             fetch(`https://badges.twitch.tv/v1/badges/channels/${context['room-id']}/display`)
               .then(res => res.json())

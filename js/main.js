@@ -248,6 +248,9 @@ async function main() {
     // Register event handlers:
     client.on('message', onMessageHandler)
     client.on('connected', onConnectedHandler)
+    client.on('messagedeleted', onMessageDeleteHandler)
+    client.on('timeout', onTimeout)
+    client.on('ban', onBan)
     // Connect to Twitch:
     client.connect().catch(onConnectErrorHandler)
     addEventListener("keydown", function(e){
