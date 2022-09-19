@@ -80,6 +80,7 @@
         //do nothing other than notify
         console.log(`Failed to delete all messages for ${userstate['target-user-id']}`)
       }
+      saveCache();
       }
       const onBan = async(channel, username, reason, userstate) => {
         try{
@@ -92,6 +93,7 @@
         //do nothing other than notify
         console.log(`Failed to delete all messages for ${userstate['target-user-id']}`)
       }
+      
       }
       const onMessageDeleteHandler = async(channel, username, deletedMessage, context) => {
         try{
@@ -101,6 +103,20 @@
           console.log(`Failed to remove message id ${context['target-msg-id']}`);
           //do nothing
         }
+        saveCache();
+      }
+      const onClear = async(channel) => {
+        try{
+        let allMessages = chatlogNode.getElementsByTagName('div');
+        let length = allMessages.length; 
+        for(let i = 0; i <= length; i++){
+          allMessages[0].remove();
+        }
+      }
+      catch{
+        console.log("No messages to clear");
+      }
+        saveCache();
       }
       const onMessageHandler = async(channel, context, msg, self) => {
         const messageNode = msgTemplate.content.cloneNode(true)

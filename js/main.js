@@ -251,6 +251,7 @@ async function main() {
     client.on('messagedeleted', onMessageDeleteHandler)
     client.on('timeout', onTimeout)
     client.on('ban', onBan)
+    client.on('clearchat', onClear)
     // Connect to Twitch:
     client.connect().catch(onConnectErrorHandler)
     addEventListener("keydown", function(e){
