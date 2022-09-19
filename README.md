@@ -73,6 +73,5 @@ Create a settings.yaml in the root directory you're hosting the files from. Use 
 * YouTube chat?
 * Blacklisting (and bot blacklist option)
 * Implement additional customizations.
-* Remove inline styles.
 * Code cleanup.
 * Emit event on twitch authorization to update emote-parse

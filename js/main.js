@@ -259,13 +259,19 @@ async function setHighlightColor() {
     }`
 }
 
+async function tmiEmoteParseSetup() {
+    await tmiEmoteParse.setTwitchCredentials(API.ClientID, API.Token.value)
+    await tmiEmoteParse.loadAssets(tmiOpts.channels[0], {"bttv": settings.options.bttv, "ffz": settings.options.ffz, "7tv": settings.options.seventv})
+    setHighlightColor();
+    document.body.appendChild(styleOverride);
+}
+
 async function main() {
     settings = await fetchSettings(settingsPath);
     loadSettings();
     if(!settings.options.apiDisable){//disable the API if it's not present.
+        TwitchAPIEvents.on('authorize', tmiEmoteParseSetup)
         API.authorize();
-        tmiEmoteParse.setTwitchCredentials(API.ClientID, API.Token.value)
-        tmiEmoteParse.loadAssets(tmiOpts.channels[0], {"bttv": settings.options.bttv, "ffz": settings.options.ffz, "7tv": settings.options.seventv})
     }
     populateSettings();
      client = new tmi.Client(tmiOpts)
@@ -276,8 +282,7 @@ async function main() {
     client.on('timeout', onTimeout)
     client.on('ban', onBan)
     client.on('clearchat', onClear)
-    setHighlightColor();
-    document.body.appendChild(styleOverride);
+    
     // Connect to Twitch:
     client.connect().catch(onConnectErrorHandler)
     addEventListener("keydown", function(e){
