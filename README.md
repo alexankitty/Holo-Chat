@@ -67,10 +67,9 @@ Create a settings.yaml in the root directory you're hosting the files from. Use 
 * Automatically remove messages when deleted, or a user is banned or timed out.
 * /clear will wipe out chat
 * Message Highlighting
+* Support for localization (If you want to help, everything is in locale.js, make a PR to get your changes pulled in)
 
 ## To Do
-* Restructure Settings scripts.
 * YouTube chat?
 * Blacklisting (and bot blacklist option)
 * Implement additional customizations.
-* Code cleanup.
