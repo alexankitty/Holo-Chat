@@ -35,6 +35,7 @@ const defaults = {//defaults if YML is trashed or settings are trashed.
   },
   appearance: {
     txtSize: 25,
+    lineHeight: 15,
     bgColor: 'black',
     bgOpacity: '0.5',
     fontName: 'Roboto',
@@ -209,6 +210,11 @@ async function loadSettings() {
   styleOverride.innerHTML=`
   html,body{
       font-family: '${settings.appearance.fontName}';
+      line-height: ${settings.appearance.lineHeight}px;
+  }
+  #chatlog>div {
+    margin-top: ${settings.appearance.txtSize / 5}px;
+    padding-bottom: ${settings.appearance.txtSize / 5}px;
   }
   .message-emote{
     height: ${settings.appearance.txtSize + 12}px;
@@ -378,10 +384,10 @@ function createSettingsDropDown(id, key, arrayValues, arrayText, currentSetting,
 
 function buildSettings() {
   let strings = lang[settings.lang]
-  for(key in settings){
+  for(key in defaults){
     if(typeof strings.headers[key] === 'undefined') continue;
     createSettingsHeader(strings.headers[key], key, strings.tooltips[key])
-    for(property in settings[key]){
+    for(property in defaults[key]){
       if(typeof strings.labels[property] === 'undefined') continue;
       let secret = false;
       if(property === 'ClientSecret') secret = true;

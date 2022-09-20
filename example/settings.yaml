@@ -1,7 +1,7 @@
 api:
-  ClientID: '' #set me to null to disable API, PFP, and extra emote platforms
+  ClientID: '' #set me to '' to disable API, PFP, and extra emote platforms
   ClientSecret: ''
-  channel: YourChannel#This is ignored if you include a hash after the url
+  channel: YourChannel #This is ignored if you include a hash after the url
   override: false #Ignores YAML in server directory
   blackList: #Custom blacklist
     - test123
@@ -24,6 +24,7 @@ emotes:
   seventv: true
 appearance:
   txtSize: 25
+  lineHeight: 15 #How much space is in between lines, in px.
   bgColor: black
   bgOpacity: '0.5'
   fontName: Roboto #We'll still use this font even if google font isn't turned on.
