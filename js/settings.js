@@ -6,12 +6,15 @@ const override = new APIStorageObject("override");
 const cached = new APIStorageObject("msgCache");
 const locale = new APIStorageObject("locale");
 const cacheExpiry = new APIStorageObject("cacheExpiry");
+let commonBotList = [];
 let settings; //this needs to be a global
 const defaults = {//defaults if YML is trashed or settings are trashed.
   api: {
-    ClientID: null,
-    ClientSecret: null,
+    ClientID: '',
+    ClientSecret: '',
     channel: '',
+    blackListCommonBots: false,
+    blackList: [],
     override: true
   },
   options: {
@@ -48,6 +51,11 @@ function validate(value, type) {
       return parseBool(value);
     case "number":
       return parseInt(value);
+    case "object":
+      if(value === null) break;
+      if(Array.isArray(value)) return value;
+      if(typeof value === "string") return value.split(/[\r\n\s,]/).filter(Boolean);
+      return value;
     default:
       return value;
   }
@@ -171,7 +179,7 @@ function exportYML() {
 });
 }
 
-function loadSettings() {
+async function loadSettings() {
   if(settings.api.ClientID !== null || settings.api.ClientID === ""){
       API.ClientID = settings.api.ClientID;
       API.ClientSecret = settings.api.ClientSecret;
@@ -228,7 +236,10 @@ function loadSettings() {
           readCache();
       }
   }
-  cacheExpiry.valueAsDate = settings.options.cacheTTL;//Update the cache time at read time. Mitigation to allow for cache deletion
+  cacheExpiry.valueAsDate = settings.messages.cacheTTL;//Update the cache time at read time. Mitigation to allow for cache deletion
+  if(settings.api.blackListCommonBots){
+    commonBotList = await fetch('https://raw.githubusercontent.com/MrEliasen/twitch-bot-list/master/whitelist.json').then((r) => {return r.json()})
+  }
   if(settings.firstRun){//make sure we get the language sorted before displaying it.
     clientLang = window.navigator.language.replace("-", "_")//convert to a format that JS can tolerate
     let langAvailable = false;
@@ -301,6 +312,16 @@ function createSettingsInput(id, key, value, text, parent, secret = false) {
     case 'number':
       input.setAttribute('type', 'number');
       input.classList.add("textInput");
+      break;
+    case 'object':
+      if(!value) break;
+      input = document.createElement("textarea");
+      input.cols = 20;
+      input.rows = 3;
+      input.setAttribute('for', id);
+      input.id = id;
+      input.setAttribute('key', key);
+      value = value.toString();
       break;
     default:
       input.setAttribute('type', 'text');

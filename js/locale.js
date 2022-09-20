@@ -22,6 +22,8 @@ const lang = {
             ClientID: "Client ID:",
             ClientSecret: "Client Secret:",
             channel: "Channel Name:",
+            blackList: "Blacklist:",
+            blackListCommonBots: "Blacklist Common Bots:",
             override: "Override YAML:",
             pfp: "Profile Pictures:",
             badge: "Badges:",
