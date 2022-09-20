@@ -73,53 +73,52 @@
         try{
         let msgList = chatlogNode.querySelectorAll(`div[userid='${userstate['target-user-id']}'`);
         for(let i = 0; i < msgList.length; i++){
-          msgList[i].remove();
+          await removeMessage(msgList[i]);
         }
       }
       catch{
         //do nothing other than notify
         console.log(`Failed to delete all messages for ${userstate['target-user-id']}`)
       }
-      saveCache();
       }
+
       const onBan = async(channel, username, reason, userstate) => {
         try{
         let msgList = chatlogNode.querySelectorAll(`div[userid='${userstate['target-user-id']}'`);
         for(let i = 0; i < msgList.length; i++){
-          msgList[i].remove();
+            await removeMessage(msgList[i]);
+          }
+        }
+        catch{
+          //do nothing other than notify
+          console.log(`Failed to delete all messages for ${userstate['target-user-id']}`)
         }
       }
-      catch{
-        //do nothing other than notify
-        console.log(`Failed to delete all messages for ${userstate['target-user-id']}`)
-      }
-      
-      }
+
       const onMessageDeleteHandler = async(channel, username, deletedMessage, context) => {
         try{
-          document.getElementById(context['target-msg-id']).remove();
+          await removeMessage(document.getElementById(context['target-msg-id']));
         }
         catch{
           console.log(`Failed to remove message id ${context['target-msg-id']}`);
           //do nothing
         }
-        saveCache();
       }
+
       const onClear = async(channel) => {
         try{
         let allMessages = chatlogNode.getElementsByTagName('div');
         let length = allMessages.length; 
         for(let i = 0; i <= length; i++){
-          allMessages[0].remove();
+          await removeMessage(allMessages[0])
         }
       }
       catch{
         console.log("No messages to clear");
       }
-        saveCache();
       }
+
       const onMessageHandler = async(channel, context, msg, self) => {
-        console.log(channel, context, msg, self)
         const messageNode = msgTemplate.content.cloneNode(true)
         //set the message ID
         messageNode.firstElementChild.setAttribute("id", `${context['id']}`);
@@ -132,7 +131,6 @@
         const nameNode = messageNode.querySelector(".name")
         if(settings.options.pfp && !settings.options.apiDisable) {
           const pfpImg = document.createElement("img");
-          pfpImg.style.height = `${parseInt(settings.options.txtSize) + 5}px`;
           pfpImg.className = 'pfp';
           if(settings.options.pfpCircle){
             pfpImg.style.borderRadius = "50%";
@@ -247,20 +245,29 @@
         chatlogNode.appendChild(messageNode)
 
         // Remove message after fade out animation
-        if(parseInt(settings.options.messageTimeout)){
+        msgTimeout = settings.messages.messageTimeout * 1000;
+        if(msgTimeout){
           setTimeout(async () => {
-            chatlogNode.firstElementChild.classList.add("delete")
-            await sleep(settings.options.messageFadeOutDuration)
-            chatlogNode.firstElementChild.remove();
-          }, settings.options.messageTimeout)
+            try{
+            removeMessage(chatlogNode.firstElementChild)
+            }
+            catch{
+              //do nothing: message is already gone.
+            }
+          }, msgTimeout)
         }
         // Remove message if exceeded
-        if(parseInt(settings.options.messageLimit) !== 0){
-          if(chatlogNode.childElementCount > settings.options.messageLimit){
-            chatlogNode.firstElementChild.classList.add("delete")
-            await sleep(settings.options.messageFadeOutDuration)
-            chatlogNode.firstElementChild.remove();
+        if(settings.messages.messageLimit !== 0){
+          if(chatlogNode.childElementCount > settings.messages.messageLimit){
+            removeMessage(chatlogNode.firstElementChild)
           }
       }
       saveCache();
+      }
+
+      async function removeMessage(messageObj){
+        messageObj.classList.add("delete")
+        await sleep(settings.messages.messageFadeOutDuration)
+        messageObj.remove();
+        saveCache();
       }
