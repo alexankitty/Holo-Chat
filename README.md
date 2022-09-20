@@ -75,4 +75,5 @@ Create a settings.yaml in the root directory you're hosting the files from. Use 
 
 ## To Do
 * YouTube chat?
+* Abstract message builder from chatMessage Handler for reusability.
 * Implement additional customizations.
