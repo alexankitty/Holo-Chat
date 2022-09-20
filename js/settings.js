@@ -35,6 +35,7 @@ const defaults = {//defaults if YML is trashed or settings are trashed.
   },
   appearance: {
     txtSize: 25,
+    lineHeight: 15,
     bgColor: 'black',
     bgOpacity: '0.5',
     fontName: 'Roboto',
@@ -209,6 +210,7 @@ async function loadSettings() {
   styleOverride.innerHTML=`
   html,body{
       font-family: '${settings.appearance.fontName}';
+      line-height: ${settings.appearance.lineHeight}px;
   }
   .message-emote{
     height: ${settings.appearance.txtSize + 12}px;
