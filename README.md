@@ -52,6 +52,7 @@ Create a settings.yaml in the root directory you're hosting the files from. Use 
 * tmi-emote-parse https://github.com/smilefx/tmi-emote-parse
 * steve1337 for the code this is based on https://github.com/steve1337/twitch-chatbox-bot
 * js-yaml https://github.com/nodeca/js-yaml
+* Twitch Bot List https://github.com/MrEliasen/twitch-bot-list
 
 ## Known Issues
 1. Getting channel badges anonymously is not supported by Twitch API and implemented with a hack
@@ -68,8 +69,9 @@ Create a settings.yaml in the root directory you're hosting the files from. Use 
 * /clear will wipe out chat
 * Message Highlighting
 * Support for localization (If you want to help, everything is in locale.js, make a PR to get your changes pulled in)
+* Blacklisting Support, along with hiding chat from common bots.
+
 
 ## To Do
 * YouTube chat?
-* Blacklisting (and bot blacklist option)
 * Implement additional customizations.

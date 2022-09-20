@@ -119,6 +119,13 @@
       }
 
       const onMessageHandler = async(channel, context, msg, self) => {
+        const displayname = context["display-name"]
+        const chatBlacklist = settings.api.blackList.concat(commonBotList);
+        for(let i = 0; i < chatBlacklist.length; i++){
+          if(displayname.toLowerCase() === chatBlacklist[i].toLowerCase()){
+            return;
+          }
+        }
         const messageNode = msgTemplate.content.cloneNode(true)
         //set the message ID
         messageNode.firstElementChild.setAttribute("id", `${context['id']}`);
@@ -127,7 +134,6 @@
         /*
         * PFP (Requires API access in TwitchAPI.js)
         */
-        const displayname = context["display-name"]
         const nameNode = messageNode.querySelector(".name")
         if(settings.options.pfp && !settings.options.apiDisable) {
           const pfpImg = document.createElement("img");

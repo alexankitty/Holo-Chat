@@ -1,15 +1,18 @@
 api:
-  ClientID: null #set me to null to disable API, PFP, and extra emote platforms
-  ClientSecret: null
-  channel: YourChannel #This is ignored if you include a hash after the url
-  override: true #Ignores YAML in server directory
+  ClientID: '' #set me to null to disable API, PFP, and extra emote platforms
+  ClientSecret: ''
+  channel: YourChannel#This is ignored if you include a hash after the url
+  override: false #Ignores YAML in server directory
+  blackList: #Custom blacklist
+    - test123
+    - test2
+  blackListCommonBots: false #Blacklists popular bots to have them not show up on stream
 options:
   pfp: true
   badge: true
   pfpCircle: true
   startFromBottom: true
   apiDisable: false
-  firstRun: false
 messages:
   messageTimeout: 0 #remove messages after x amount of time. Set to 0 to disable.
   messageLimit: 0 #delete messages after x amount have been received. Set to 0 to disable.

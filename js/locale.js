@@ -6,7 +6,7 @@ const lang = {
             messages: "Message Handling",
             appearance: "Appearance Settings",
             emotes: "Emote Platforms",
-            config: "Import/Export",
+            imports: "Import/Export",
         },
         tooltips: {
             api: `Client ID and Secret enable usage of the API for PFP and additional emotes
@@ -22,6 +22,8 @@ const lang = {
             ClientID: "Client ID:",
             ClientSecret: "Client Secret:",
             channel: "Channel Name:",
+            blackList: "Blacklist:",
+            blackListCommonBots: "Blacklist Common Bots:",
             override: "Override YAML:",
             pfp: "Profile Pictures:",
             badge: "Badges:",
