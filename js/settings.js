@@ -99,6 +99,9 @@ async function fetchSettings(path) {
       }
     catch(e){
       console.error(`${e}\nYAML is invalid.`)
+      override.value = true;
+      yaml = defaults;
+      settingStore.value = jsYaml.dump(yaml);//store and override to ensure it continues to work.
     }
     yaml.api.override = parseBool(override.value);
     console.log("local settings loaded");
