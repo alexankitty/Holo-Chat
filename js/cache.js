@@ -1,11 +1,13 @@
 async function saveCache() {
-    if(!settings.options.cacheTTL) return;
+    if(!settings.messages.cacheTTL) return;
+    console.log("saving cache")
     const chatlogNode = document.querySelector("#chatlog")
     cached.value = chatlogNode.innerHTML;
-    cacheExpiry.valueAsDate = settings.options.cacheTTL;
+    cacheExpiry.valueAsDate = settings.messages.cacheTTL;
 }
 
 async function readCache() {
+    console.log("reading cache")
     var d = new Date();
     if(cacheExpiry.value >= d.getTime()){
         chatlogNode.innerHTML = cached.value;
