@@ -213,8 +213,8 @@ async function loadSettings() {
       line-height: ${settings.appearance.lineHeight}px;
   }
   #chatlog>div {
-    margin-top: ${settings.appearance.txtSize / 5 * 2}px;
-    padding-bottom: ${settings.appearance.txtSize / 5 * 2}px;
+    margin-top: ${settings.appearance.txtSize / 5}px;
+    padding-bottom: ${settings.appearance.txtSize / 5}px;
   }
   .message-emote{
     height: ${settings.appearance.txtSize + 12}px;
