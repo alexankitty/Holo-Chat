@@ -54,7 +54,6 @@ function validate(value, type) {
 }
 
 async function fetchSettings(path) {
-    let yaml;
     if(override.value == "false" || override.value == null){
         try{
         let response = await fetch(path);
@@ -103,6 +102,21 @@ async function fetchSettings(path) {
       yaml = defaults;
       settingStore.value = jsYaml.dump(yaml);//store and override to ensure it continues to work.
     }
+    window.yamlTemp = yaml;//hack to enable deletion
+    for(key in window.yamlTemp){//remove settings no longer used
+      if(typeof key !== 'object'){
+        if(typeof defaults[key] === 'undefined'){
+          delete window.yamlTemp[key];
+        }
+        for(properties in window.yamlTemp[key]){
+          if(typeof defaults[key][properties] === 'undefined'){
+            delete window.yamlTemp[key][properties];
+          }
+        }
+      }
+    }
+    yaml = window.yamlTemp;//merge it back into the original variable
+    delete window.yamlTemp;//cleanup
     yaml.api.override = parseBool(override.value);
     console.log("local settings loaded");
     return yaml;
@@ -204,7 +218,6 @@ function loadSettings() {
   `;
   
   const css = getComputedStyle(document.documentElement);
-  settings.messages.messageFadeOutDelay = settings.options.messageTimeout;
   settings.messages.messageFadeOutDuration = css_time_to_milliseconds(getComputedStyle(document.documentElement).getPropertyValue('--fade-out-duration'))
   const bodyBg = document.getElementById("background");
   document.body.style.fontSize = `${settings.appearance.txtSize}px`
