@@ -6,7 +6,7 @@ const lang = {
             messages: "Message Handling",
             appearance: "Appearance Settings",
             emotes: "Emote Platforms",
-            config: "Import/Export",
+            imports: "Import/Export",
         },
         tooltips: {
             api: `Client ID and Secret enable usage of the API for PFP and additional emotes

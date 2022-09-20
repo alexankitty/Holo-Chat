@@ -373,4 +373,6 @@ function buildSettings() {
     langNameArr.push(lang[langArr[i]].localeName)
   }
   createSettingsDropDown("lang", "lang", langArr, langNameArr, settings.lang, strings.labels['lang'], 'api');
+  let importSection = document.getElementById("imports");
+  importSection.innerText = strings.headers.imports;
 }
