@@ -29,6 +29,7 @@ const defaults = {//defaults if YML is trashed or settings are trashed.
     cacheTTL: 3600
   },
   emotes: {
+    reloadTimer: 300,
     bttv: true,
     ffz: true,
     seventv: true

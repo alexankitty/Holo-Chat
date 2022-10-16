@@ -30,8 +30,16 @@ async function setHighlightColor() {
 async function tmiEmoteParseSetup() {
     await tmiEmoteParse.setTwitchCredentials(API.ClientID, API.Token.value)
     await tmiEmoteParse.loadAssets(tmiOpts.channels[0], {"bttv": settings.emotes.bttv, "ffz": settings.emotes.ffz, "7tv": settings.emotes.seventv})
+    if(settings.emotes.reloadTimer) {
+        tmiEmoteReload();
+    }
     setHighlightColor();
     document.body.appendChild(styleOverride);
+}
+
+async function tmiEmoteReload() {
+    await tmiEmoteParse.loadAssets(tmiOpts.channels[0], {"bttv": settings.emotes.bttv, "ffz": settings.emotes.ffz, "7tv": settings.emotes.seventv})
+    setTimeout(tmiEmoteReload, (settings.emotes.reloadTimer * 1000));
 }
 
 async function main() {
