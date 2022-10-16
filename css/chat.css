@@ -156,6 +156,10 @@ html, body {
   user-select: none;
 }
 
+.settings > * {
+  line-height: normal;
+}
+
 .settingsHide {
   opacity: 0;
   transition: opacity 0.5s;
@@ -209,8 +213,8 @@ label {
   background-color: #555555cc;
   color: #fff;
   text-align: center;
-  padding: 5px 0;
-  border-radius: 6px;
+  padding: 5px;
+  border-radius: 10px;
   width: fit-content;
   /* Position the tooltip text */
   position: absolute;

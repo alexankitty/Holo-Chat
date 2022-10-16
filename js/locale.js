@@ -32,6 +32,7 @@ const lang = {
             messageTimeout: "Message Timeout (s):",
             messageLimit: "Message Limit:",
             cacheTTL: "Cache Expiration (s):",
+            reloadTimer: "Reload Emotes (s):",
             bttv: "BTTV:",
             ffz: "FFZ:",
             seventv: "7TV:",
@@ -42,7 +43,7 @@ const lang = {
             fontName: "Font Name:",
             fontWeight: "Font Style #:",
             googleFont: "Google Fonts:",
-            lang: "Language:"
+            lang: "Language:",
         },
         localeName: "English (United States)"
     }
