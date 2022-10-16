@@ -29,7 +29,7 @@ async function setHighlightColor() {
 
 async function tmiEmoteParseSetup() {
     await tmiEmoteParse.setTwitchCredentials(API.ClientID, API.Token.value)
-    await tmiEmoteParse.loadAssets(tmiOpts.channels[0], {"bttv": settings.options.bttv, "ffz": settings.options.ffz, "7tv": settings.options.seventv})
+    await tmiEmoteParse.loadAssets(tmiOpts.channels[0], {"bttv": settings.emotes.bttv, "ffz": settings.emotes.ffz, "7tv": settings.emotes.seventv})
     setHighlightColor();
     document.body.appendChild(styleOverride);
 }
