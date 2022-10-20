@@ -165,10 +165,12 @@
         const badges = context["badges"]
         // HACK: get channel-id w/o AUTH (Thx Twitch API)
         if(settings.options.apiDisable){//Legacy handling for obtaining badges. The first request will always fail for some reason.
-          if (badgeSetsChannel === null)
-            fetch(`https://badges.twitch.tv/v1/badges/channels/${context['room-id']}/display`)
+          if (badgeSetsChannel === null){
+            await fetch(`https://badges.twitch.tv/v1/badges/channels/${context['room-id']}/display`)
               .then(res => res.json())
               .then(json => badgeSetsChannel = json.badge_sets)
+          }
+
           for (const badge in badges) {
             try {
               // Prepare badge stuff
