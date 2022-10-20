@@ -221,7 +221,8 @@ async function loadSettings() {
     height: ${settings.appearance.txtSize + 12}px;
   }
   #chatlog {
-    ${settings.options.startFromBottom ? "bottom:" : "top:"} 0;
+    bottom: 0;
+    ${settings.options.startFromBottom ? "" : "height: 100%;"}
   }
   .pfp{
       height: ${settings.appearance.txtSize + 5}px;
