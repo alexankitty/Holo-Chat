@@ -109,7 +109,7 @@ class API {
 		TwitchAPIEvents.emit('authorize');
 	}
 
-	static async fetch({url, responseHandler, paramobj = {}, headerobj = {}, method = "GET", mode = 'cors', cache = 'default', credentials = 'same-origin', redirect = 'follow', referrerpolicy = 'no-referrer-when-downgrade', urlencode = false, authorizing = false}) {//And so it begins
+	static async fetch({url, responseHandler, paramobj = {}, headerobj = {}, method = "GET", mode = 'cors', cache = 'default', credentials = 'omit', redirect = 'follow', referrerpolicy = 'no-referrer', urlencode = false, authorizing = false}) {//And so it begins
 		if (urlencode) {
 			
 			headerobj['Content-Type'] = 'application/x-www-form-urlencoded';

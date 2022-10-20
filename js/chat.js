@@ -141,8 +141,19 @@
           if(settings.options.pfpCircle){
             pfpImg.style.borderRadius = "50%";
           }
+          try{
           pfpImg.src = await getPFP(displayname);
           nameNode.appendChild(pfpImg);
+          }
+          catch{
+            try{//retry just in case something silly happened
+              pfpImg.src = await getPFP(displayname);
+              nameNode.appendChild(pfpImg);
+            }
+            catch{
+              console.error(`Failed to load PFP for ${context['display-name']} continuing on without one.`)
+            }
+          }
         }
 
         /*
