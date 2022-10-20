@@ -141,8 +141,19 @@
           if(settings.options.pfpCircle){
             pfpImg.style.borderRadius = "50%";
           }
+          try{
           pfpImg.src = await getPFP(displayname);
           nameNode.appendChild(pfpImg);
+          }
+          catch{
+            try{//retry just in case something silly happened
+              pfpImg.src = await getPFP(displayname);
+              nameNode.appendChild(pfpImg);
+            }
+            catch{
+              console.error(`Failed to load PFP for ${context['display-name']} continuing on without one.`)
+            }
+          }
         }
 
         /*
@@ -165,10 +176,12 @@
         const badges = context["badges"]
         // HACK: get channel-id w/o AUTH (Thx Twitch API)
         if(settings.options.apiDisable){//Legacy handling for obtaining badges. The first request will always fail for some reason.
-          if (badgeSetsChannel === null)
-            fetch(`https://badges.twitch.tv/v1/badges/channels/${context['room-id']}/display`)
+          if (badgeSetsChannel === null){
+            await fetch(`https://badges.twitch.tv/v1/badges/channels/${context['room-id']}/display`)
               .then(res => res.json())
               .then(json => badgeSetsChannel = json.badge_sets)
+          }
+
           for (const badge in badges) {
             try {
               // Prepare badge stuff

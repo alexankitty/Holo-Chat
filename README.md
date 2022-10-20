@@ -56,7 +56,7 @@ Create a settings.yaml in the root directory you're hosting the files from. Use 
 * Twitch Bot List https://github.com/MrEliasen/twitch-bot-list
 
 ## Known Issues
-1. Getting channel badges anonymously is not supported by Twitch API and implemented with a hack
+1. Randomly fails CORS requests, but unsure as to why. Implementing additional error handling.
 
 ## New Features
 * Additional configuration options
