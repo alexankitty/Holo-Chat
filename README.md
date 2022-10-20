@@ -77,3 +77,7 @@ Create a settings.yaml in the root directory you're hosting the files from. Use 
 * YouTube chat?
 * Abstract message builder from chatMessage Handler for reusability.
 * Implement additional customizations.
+
+## Donation
+If my project has helped you out, consider buying me a coffee.  
+[Paypal](https://paypal.me/alexankitty?country.x=US&locale.x=en_US)
