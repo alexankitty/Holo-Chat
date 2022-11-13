@@ -91,7 +91,7 @@ html, body {
 
 #chatlog .message,
 #chatlog .meta {
-  display: inline;
+  display: inline-block;
 }
 
 #chatlog .meta {
@@ -100,32 +100,35 @@ html, body {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-  vertical-align: sub;
+  vertical-align: middle;
+  max-width: 100%;
 }
 
 #chatlog .message {
-  word-wrap: break-word;
-  vertical-align: sub;
+  word-break: break-word;
+  vertical-align: middle;
+  padding-bottom: 5px;
 }
 
 #chatlog .badge {
   display: inline-block;
   margin-right: 5px;
   position: relative;
-  vertical-align: baseline;
+  vertical-align: middle;
 }
 
 #chatlog .badges {
-  vertical-align: text-top;
+  vertical-align: middle;
 }
 
 .pfp {
-  vertical-align: text-top;
+  vertical-align: middle;
   margin-right: 5px;
 }
 
 .message-emote {
-  vertical-align: sub;
+  vertical-align: middle;
+  margin-left: 5px;
 }
 
 .settingsWrap {
