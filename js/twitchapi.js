@@ -23,7 +23,7 @@ class APIStorageObject{
 	}
 
 	set valueAsDate(s) {
-		this.value = Date.now() + s;
+		this.value = Date.now() + (s * 1000);//convert to S
 	}
 }
 

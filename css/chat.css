@@ -119,6 +119,10 @@ html, body {
   vertical-align: text-top;
 }
 
+#chatlog .name {
+  text-overflow: ellipsis;
+}
+
 .pfp {
   vertical-align: text-top;
   margin-right: 5px;
