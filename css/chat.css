@@ -79,19 +79,23 @@ html, body {
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
-  padding: 0.4em 0.2em;
   position: relative;
+  vertical-align: top;
 }
 
 #chatlog .emote img {
   display: inline-block;
   height: 1.5em;
-  vertical-align: middle;
+
 }
 
 #chatlog .message,
 #chatlog .meta {
   display: inline-block;
+}
+
+#chatlog .username {
+  vertical-align: top;
 }
 
 #chatlog .meta {
@@ -100,35 +104,33 @@ html, body {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-  vertical-align: middle;
+
   max-width: 100%;
 }
 
 #chatlog .message {
   word-break: break-word;
-  vertical-align: middle;
-  padding-bottom: 5px;
+  overflow: hidden;
+  vertical-align: top;
 }
 
 #chatlog .badge {
   display: inline-block;
   margin-right: 5px;
   position: relative;
-  vertical-align: middle;
+
 }
 
 #chatlog .badges {
-  vertical-align: middle;
+
 }
 
 .pfp {
-  vertical-align: middle;
   margin-right: 5px;
 }
 
 .message-emote {
-  vertical-align: middle;
-  margin-left: 5px;
+  vertical-align: top;
 }
 
 .settingsWrap {

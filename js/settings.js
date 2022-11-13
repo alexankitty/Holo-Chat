@@ -211,7 +211,6 @@ async function loadSettings() {
   styleOverride.innerHTML=`
   html,body{
       font-family: '${settings.appearance.fontName}';
-      line-height: ${settings.appearance.lineHeight}px;
   }
   #chatlog>div {
     margin-top: ${settings.appearance.txtSize / 5}px;
@@ -219,6 +218,8 @@ async function loadSettings() {
   }
   .message-emote{
     height: ${settings.appearance.txtSize + 12}px;
+    margin-left: ${settings.appearance.txtSize / 5}px;
+    margin-right: ${settings.appearance.txtSize / 5}px;
   }
   #chatlog {
     bottom: 0;

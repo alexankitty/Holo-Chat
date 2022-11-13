@@ -159,8 +159,10 @@
         /*
         * USERNAME
         */
-        
-        nameNode.innerHTML += displayname
+        const nameSpan = document.createElement('span');
+        nameSpan.innerHTML += displayname
+        nameSpan.classList.add("username")
+        nameNode.appendChild(nameSpan);
         if (context["color"] !== null) {
           nameNode.style.color = context["color"]
         } else {

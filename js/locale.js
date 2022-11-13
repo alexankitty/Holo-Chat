@@ -37,7 +37,6 @@ const lang = {
             ffz: "FFZ:",
             seventv: "7TV:",
             txtSize: "Text Size (px):",
-            lineHeight: "Line Height (px):",
             bgColor: "Background Color:",
             bgOpacity: "Background Opacity:",
             fontName: "Font Name:",

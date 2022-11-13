@@ -25,7 +25,6 @@ emotes:
   seventv: true
 appearance:
   txtSize: 25
-  lineHeight: 15 #How much space is in between lines, in px.
   bgColor: black
   bgOpacity: '0.5'
   fontName: Roboto #We'll still use this font even if google font isn't turned on.
