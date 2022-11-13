@@ -6,15 +6,16 @@ async function saveCache() {
 }
 
 async function readCache() {
-    var d = new Date();
-    if(cacheExpiry.value >= d.getTime()){
+    if(cacheExpiry.value >= Date.now()){
         chatlogNode.innerHTML = cached.value;
+    }
+    else{
+        cached.value = '';
     }
 }
 
 async function cacheWatchDog() {
-    var d = new Date();
-    if(cacheExpiry.value < d.getTime()){
+    if(cacheExpiry.value < Date.now()){
         cached.value = '';
         cacheExpiry.value = 0;
     }

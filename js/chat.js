@@ -175,7 +175,7 @@
         const badgesNode = messageNode.querySelector(".badges")
         const badges = context["badges"]
         // HACK: get channel-id w/o AUTH (Thx Twitch API)
-        if(settings.options.apiDisable){//Legacy handling for obtaining badges. The first request will always fail for some reason.
+        if(settings.options.apiDisable){//Legacy handling for obtaining badges.
           if (badgeSetsChannel === null){
             await fetch(`https://badges.twitch.tv/v1/badges/channels/${context['room-id']}/display`)
               .then(res => res.json())
