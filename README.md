@@ -9,7 +9,7 @@ PS: The name is a portmanteau of holodeck and chat. This project has changed a t
 ![Settings GUI for adjusting configs](https://github.com/alexankitty/twitch-chatbox-bot/blob/main/docs/settingsgui.png?raw=true)
 1. Create an application at https://dev.twitch.tv/console (optional: if you don't do this it will run in legacy mode which does not support pfp and emote platforms)
 ![Add OBS Source](https://github.com/alexankitty/twitch-chatbox-bot/blob/main/docs/obs%20source.png?raw=true)
-2. Add an OBS source and size it to your liking (might want to adjust it large first) and point it to https://alexankitty.github.io/Holo-Chat/ChatboxBot.html
+2. Add an OBS source and size it to your liking (might want to adjust it large first) and point it to https://alexankitty.github.io/Holo-Chat/HoloChat.html
 
 ![Interact with the source for settings](https://github.com/alexankitty/twitch-chatbox-bot/blob/main/docs/interact.png?raw=true)
 
@@ -25,6 +25,15 @@ PS: The name is a portmanteau of holodeck and chat. This project has changed a t
 ## Advanced Configuration
 ![YAML Config](https://github.com/alexankitty/twitch-chatbox-bot/blob/main/docs/configfile.png?raw=true)
 Create a settings.yaml in the root directory you're hosting the files from. Use something like light-server in nodejs. a settings.yaml being present will initially override the GUI settings, if you want the GUI instead, make sure to check Override YAML.
+
+## Setting Up YouTube Chat
+Note: Due to the way that youtube handles chatting and how expensive querying their API is, realtime requires a websocket and some scraping which may or may not be a TOS issue; you've bee warned.  
+1. Clone my [Youtube-WS-Chat-Wrapper](https://github.com/alexankitty/Youtube-WS-Chat-Wrapper) project.
+2. Follow the directions in the repo for setting up. Dependencies will need to be installed. You will need NodeJS.
+3. In holo-chat, set up the new sections under API to your liking.
+4. For websocket make sure it's set to the IP where the server is being hosted (this defaults to ws://127.0.0.1:8081)
+5. Put in the channel handle (This is expensive so IDs are preferred, but the server will also save IDs that have already been looked up to conserve quota) or ID that it will be listening to.
+6. Create a google cloud project, and acquire a twitch oauth token (for forwarding messages). More on this in the chat wrapper repo.
 
 ## Configuration Explanation
 * Tooltips now give a brief overview of what the settings do
