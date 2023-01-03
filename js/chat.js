@@ -119,6 +119,7 @@
       }
 
       const onMessageHandler = async(channel, context, msg, self) => {
+        if(msg.startsWith("[YouTube]")) return;
         const displayname = context["display-name"]
         const chatBlacklist = settings.api.blackList.concat(commonBotList);
         for(let i = 0; i < chatBlacklist.length; i++){
@@ -159,8 +160,10 @@
         /*
         * USERNAME
         */
-        
-        nameNode.innerHTML += displayname
+        const nameSpan = document.createElement('span');
+        nameSpan.innerHTML += displayname
+        nameSpan.classList.add("username")
+        nameNode.appendChild(nameSpan);
         if (context["color"] !== null) {
           nameNode.style.color = context["color"]
         } else {
@@ -171,8 +174,17 @@
         /*
         * BADGES
         */
+       
+       const badgesNode = messageNode.querySelector(".badges");
+       
+       if(settings.api.twitchBadge) {
+        //create a twitch specific badge
+        const twitchImg = document.createElement("img");
+        twitchImg.className = "badge"
+        twitchImg.src = "png/twitch.png"
+        badgesNode.appendChild(twitchImg)
+       }
        if(settings.options.badge){
-        const badgesNode = messageNode.querySelector(".badges")
         const badges = context["badges"]
         // HACK: get channel-id w/o AUTH (Thx Twitch API)
         if(settings.options.apiDisable){//Legacy handling for obtaining badges.

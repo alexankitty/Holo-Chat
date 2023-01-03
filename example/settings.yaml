@@ -7,6 +7,12 @@ api:
     - test123
     - test2
   blackListCommonBots: false #Blacklists popular bots to have them not show up on stream
+  twitchBadge: true #Display special badges for twitch and youtube.
+  youtubeBadge: true
+  ytEnable: false
+  ytChannel: "YouTube Channel/ID"
+  ytWs: "ws://127.0.0.1:8081"
+  forward: false
 options:
   pfp: true
   badge: true
@@ -25,7 +31,6 @@ emotes:
   seventv: true
 appearance:
   txtSize: 25
-  lineHeight: 15 #How much space is in between lines, in px.
   bgColor: black
   bgOpacity: '0.5'
   fontName: Roboto #We'll still use this font even if google font isn't turned on.

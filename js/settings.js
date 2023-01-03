@@ -15,7 +15,13 @@ const defaults = {//defaults if YML is trashed or settings are trashed.
     channel: '',
     blackListCommonBots: false,
     blackList: [],
-    override: true
+    override: true,
+    twitchBadge: true,
+    youtubeBadge: true,
+    ytEnable: false,
+    ytChannel: "YouTube Channel/ID",
+    ytWs: "http://127.0.0.1:8081",
+    forward: false
   },
   options: {
     pfp: true,
@@ -211,7 +217,6 @@ async function loadSettings() {
   styleOverride.innerHTML=`
   html,body{
       font-family: '${settings.appearance.fontName}';
-      line-height: ${settings.appearance.lineHeight}px;
   }
   #chatlog>div {
     margin-top: ${settings.appearance.txtSize / 5}px;
@@ -219,6 +224,8 @@ async function loadSettings() {
   }
   .message-emote{
     height: ${settings.appearance.txtSize + 12}px;
+    margin-left: ${settings.appearance.txtSize / 5}px;
+    margin-right: ${settings.appearance.txtSize / 5}px;
   }
   #chatlog {
     bottom: 0;
