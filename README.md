@@ -9,7 +9,7 @@ PS: The name is a portmanteau of holodeck and chat. This project has changed a t
 ![Settings GUI for adjusting configs](https://github.com/alexankitty/twitch-chatbox-bot/blob/main/docs/settingsgui.png?raw=true)
 1. Create an application at https://dev.twitch.tv/console (optional: if you don't do this it will run in legacy mode which does not support pfp and emote platforms)
 ![Add OBS Source](https://github.com/alexankitty/twitch-chatbox-bot/blob/main/docs/obs%20source.png?raw=true)
-2. Add an OBS source and size it to your liking (might want to adjust it large first) and point it to https://alexankitty.github.io/Holo-Chat/HoloChat.html
+2. Add an OBS source and size it to your liking (might want to adjust it large first) and point it to https://alexankitty.github.io/Holo-Chat/Holo-Chat.html
 
 ![Interact with the source for settings](https://github.com/alexankitty/twitch-chatbox-bot/blob/main/docs/interact.png?raw=true)
 
