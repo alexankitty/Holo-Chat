@@ -21,6 +21,12 @@ const lang = {
         labels: {
             ClientID: "Client ID:",
             ClientSecret: "Client Secret:",
+            twitchBadge: "Twitch Badge:",
+            youtubeBadge: "Youtube Badge:",
+            ytEnable: "Enable YouTube Chat:",
+            ytChannel: "YouTube Channel/ID",
+            ytWs: "Websocket server:",
+            forward: "Forward to Twitch:",
             channel: "Channel Name:",
             blackList: "Blacklist:",
             blackListCommonBots: "Blacklist Common Bots:",

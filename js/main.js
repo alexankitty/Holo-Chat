@@ -67,6 +67,13 @@ async function main() {
             is_fired = true
         }
     });
+    if(settings.api.ytEnable) {
+        let forward;
+        if(settings.api.forward) {
+            forward = settings.api.channel
+        }
+        setupYtChat(settings.api.ytChannel, settings.api.ytWs, forward)
+    }
     cacheWatchDog();
 }
 main();

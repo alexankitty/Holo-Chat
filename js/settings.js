@@ -15,7 +15,13 @@ const defaults = {//defaults if YML is trashed or settings are trashed.
     channel: '',
     blackListCommonBots: false,
     blackList: [],
-    override: true
+    override: true,
+    twitchBadge: true,
+    youtubeBadge: true,
+    ytEnable: false,
+    ytChannel: "YouTube Channel/ID",
+    ytWs: "http://127.0.0.1:8081",
+    forward: false
   },
   options: {
     pfp: true,
