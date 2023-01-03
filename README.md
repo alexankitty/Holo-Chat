@@ -80,10 +80,10 @@ Note: Due to the way that youtube handles chatting and how expensive querying th
 * Message Highlighting
 * Support for localization (If you want to help, everything is in locale.js, make a PR to get your changes pulled in)
 * Blacklisting Support, along with hiding chat from common bots.
+* Support for youtube chat via websocket.
 
 
 ## To Do
-* YouTube chat?
 * Abstract message builder from chatMessage Handler for reusability.
 * Implement additional customizations.
 
