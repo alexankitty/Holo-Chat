@@ -27,7 +27,7 @@ PS: The name is a portmanteau of holodeck and chat. This project has changed a t
 Create a settings.yaml in the root directory you're hosting the files from. Use something like light-server in nodejs. a settings.yaml being present will initially override the GUI settings, if you want the GUI instead, make sure to check Override YAML.
 
 ## Setting Up YouTube Chat
-Note: Due to the way that youtube handles chatting and how expensive querying their API is, realtime requires a websocket and some scraping which may or may not be a TOS issue; you've bee warned.  
+Note: Due to the way that youtube handles chatting and how expensive querying their API is, realtime requires a websocket and some scraping which may or may not be a TOS issue; you've been warned.  
 1. Clone my [Youtube-WS-Chat-Wrapper](https://github.com/alexankitty/Youtube-WS-Chat-Wrapper) project.
 2. Follow the directions in the repo for setting up. Dependencies will need to be installed. You will need NodeJS.
 3. In holo-chat, set up the new sections under API to your liking.
