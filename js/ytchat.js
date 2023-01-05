@@ -154,6 +154,7 @@ function parseYtEmotes(msg){
             }
             if(key == 'url') {
                 let msgEmote = document.createElement('img');
+                msgEmote.className = "emote"
                 msgEmote.src = msg[i][key];
                 messageContent.appendChild(msgEmote);
             }
