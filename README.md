@@ -9,7 +9,7 @@ PS: The name is a portmanteau of holodeck and chat. This project has changed a t
 ![Settings GUI for adjusting configs](https://github.com/alexankitty/twitch-chatbox-bot/blob/main/docs/settingsgui.png?raw=true)
 1. Create an application at https://dev.twitch.tv/console (optional: if you don't do this it will run in legacy mode which does not support pfp and emote platforms)
 ![Add OBS Source](https://github.com/alexankitty/twitch-chatbox-bot/blob/main/docs/obs%20source.png?raw=true)
-2. Add an OBS source and size it to your liking (might want to adjust it large first) and point it to https://alexankitty.github.io/Holo-Chat/Holo-Chat.html
+2. Add an OBS source and size it to your liking (might want to adjust it large first) and point it to https://alexankitty.github.io/Holo-Chat/Holo-Chat.html (If you want to make use of youtube chat, you will instead need to clone this repo and then serve it with something like light-server from nodejs. I would recommend this method anyway if you run a lot of overlays. Otherwise if you don't, the websocket will fail to connect because you can't connect from a secure https page to an insecure ws socket.)
 
 ![Interact with the source for settings](https://github.com/alexankitty/twitch-chatbox-bot/blob/main/docs/interact.png?raw=true)
 
