@@ -66,6 +66,7 @@ Note: Due to the way that youtube handles chatting and how expensive querying th
 
 ## Known Issues
 1. Randomly fails CORS requests, but unsure as to why. Implementing additional error handling.
+2. Twitch badges are b0rked. Need to figure out how to get them now that the legacy badges endpoint is 死 。
 
 ## New Features
 * Additional configuration options
